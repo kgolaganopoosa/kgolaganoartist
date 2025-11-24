@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coolie Links - Study & Work Anywhere</title>
+    <title>Coolie Links - Study & Work Anywhere in the World</title>
+    
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -28,22 +33,90 @@
             --job-gradient: linear-gradient(45deg, #ee5a52, #f9ca24);
             --footer-bg: rgba(26, 26, 46, 0.9);
         }
-        body {font-family: 'Poppins', sans-serif;background:var(--bg-gradient);min-height:100vh;padding-top:80px;color:var(--text-primary);transition:all .3s;}
-        .navbar {background:var(--navbar-bg)!important;backdrop-filter:blur(10px);box-shadow:0 4px 15px rgba(0,0,0,.3);}
-        .navbar-brand {font-weight:700;font-size:1.8rem;background:linear-gradient(45deg,#00ff88,#00b7ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-        .hero-section {background:var(--hero-bg);backdrop-filter:blur(10px);border-radius:20px;padding:60px 20px;margin:30px 0;text-align:center;color:var(--text-primary);}
-        .card {transition:all .3s;background:var(--card-bg);color:var(--text-primary);border:none;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.2);}
-        .card:hover {transform:translateY(-10px);box-shadow:0 20px 40px rgba(0,0,0,.3);}
-        .job-portal-card {background:var(--job-gradient);color:white;}
-        footer {background:var(--footer-bg);color:#aaa;padding:40px 0;margin-top:80px;}
-        .theme-toggle {background:none;border:none;font-size:1.5rem;color:white;cursor:pointer;}
-        #loading {text-align:center;color:white;margin:50px 0;}
-        .pagination .page-link {color:#00b7ff;}
-        .pagination .page-item.active .page-link {background:#00b7ff;border-color:#00b7ff;color:white;}
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            padding-top: 80px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        .navbar {
+            background: var(--navbar-bg) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, #00ff88, #00b7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-section {
+            background: var(--hero-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 60px 20px;
+            margin: 30px 0;
+            text-align: center;
+            color: var(--text-primary);
+        }
+        .card {
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .university-card {
+            margin-bottom: 20px;
+        }
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .job-portal-card {
+            background: var(--job-gradient);
+            color: white;
+        }
+        footer {
+            background: var(--footer-bg);
+            color: #aaa;
+            padding: 40px 0;
+            margin-top: 80px;
+        }
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+        }
+        #loading {
+            text-align: center;
+            color: white;
+            margin: 50px 0;
+        }
+        .pagination {
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .page-item.active .page-link {
+            background-color: #00b7ff;
+            border-color: #00b7ff;
+        }
     </style>
 </head>
 <body data-theme="light">
 
+<!-- Fixed Floating Navbar -->
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Coolie Links</a>
@@ -56,189 +129,244 @@
                 <li class="nav-item"><a class="nav-link text-white" href="#jobs">Job Portals</a></li>
                 <li class="nav-item"><a class="nav-link text-white" href="#about">About</a></li>
                 <li class="nav-item">
-                    <button class="theme-toggle" id="themeToggle"><i class="bi bi-moon-stars-fill"></i></button>
+                    <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+                        <i class="bi bi-moon-stars-fill"></i>
+                    </button>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
+<!-- Hero Section -->
 <div class="container">
     <div class="hero-section">
         <h1 class="display-4 fw-bold">Coolie Links</h1>
         <p class="lead">Your One-Stop Portal to Study & Work Anywhere in the World</p>
-        <p>Search 10,000+ universities • Global job portals • 100% free</p>
+        <p>Search 10,000+ universities by name or country • Apply directly • Find your dream job worldwide</p>
         <div class="search-box mt-4">
             <input type="text" id="globalSearch" class="form-control form-control-lg rounded-pill" placeholder="Search university or country...">
         </div>
     </div>
 </div>
 
+<!-- Universities Section -->
 <div class="container my-5" id="universities">
-    <h2 class="text-center mb-5 text-white">10,000+ Universities Worldwide</h2>
+    <h2 class="text-center mb-5 text-white">10,000+ Universities & Colleges Worldwide</h2>
     <div class="row">
         <div class="col-lg-4 mb-4">
-            <select id="countryFilter" class="form-select form-select-lg"><option value="">All Countries</option></select>
+            <select id="countryFilter" class="form-select form-select-lg mb-3">
+                <option value="">All Countries</option>
+                <!-- Populated dynamically -->
+            </select>
         </div>
         <div class="col-lg-4 mb-4">
-            <input type="number" id="perPage" class="form-control" value="20" min="10" max="100" placeholder="Results per page">
+            <input type="number" id="perPage" class="form-control" placeholder="Results per page (default 20)" value="20" min="10" max="100">
         </div>
     </div>
 
     <div id="loading" class="row">
         <div class="col-12">
-            <div class="spinner-border text-light"></div>
-            <p>Loading universities...</p>
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p>Loading 10,000+ universities... Please wait.</p>
         </div>
     </div>
 
-    <div id="universityList" class="row" style="display:none;"></div>
-
-    <!-- FIXED PAGINATION WITH NUMBERS + PREVIOUS/NEXT -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center mt-4" id="pagination"></ul>
+    <div id="universityList" class="row" style="display: none;"></div>
+    <nav aria-label="University pagination">
+        <ul class="pagination" id="pagination"></ul>
     </nav>
 </div>
 
+<!-- Job Portals Section -->
 <div class="container my-5" id="jobs">
-    <h2 class="text-center mb-5 text-white">Global Job Portals</h2>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"></div>
+    <h2 class="text-center mb-5 text-white">Global Job Portals – Apply Anywhere</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Job portals injected by JS -->
+    </div>
+</div>
+
+<!-- About Section -->
+<div class="container my-5" id="about">
+    <div class="hero-section">
+        <h2>About Coolie Links</h2>
+        <p>We believe education and opportunity should have no borders. Coolie Links connects ambitious students and professionals to over 10,000 universities and jobs worldwide — all in one place.</p>
+        <p class="fw-bold">Study where you dream. Work where you thrive.</p>
+    </div>
 </div>
 
 <footer class="text-center">
     <div class="container">
         <p>© 2025 Coolie Links • Made with ❤️ for global dreamers</p>
+        <p>No borders. No limits. Just opportunities.</p>
     </div>
 </footer>
 
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
+// Global Job Portals (unchanged)
 const jobPortals = [
-    {name:"LinkedIn",url:"https://www.linkedin.com/jobs",icon:"bi-linkedin"},
-    {name:"Indeed",url:"https://www.indeed.com/worldwide",icon:"bi-globe"},
-    {name:"Glassdoor",url:"https://www.glassdoor.com",icon:"bi-building"},
-    {name:"Monster",url:"https://www.monster.com",icon:"bi-briefcase"},
-    {name:"Naukri",url:"https://www.naukri.com",icon:"bi-search"},
-    {name:"Seek",url:"https://www.seek.com.au",icon:"bi-briefcase-fill"},
-    {name:"StepStone",url:"https://www.stepstone.com",icon:"bi-euro"},
-    {name:"CareerJet",url:"https://www.careerjet.com",icon:"bi-airplane"},
-    {name:"ZipRecruiter",url:"https://www.ziprecruiter.com",icon:"bi-lightning"},
-    {name:"TotalJobs",url:"https://www.totaljobs.com",icon:"bi-geo-alt"}
+    { name: "LinkedIn", url: "https://www.linkedin.com/jobs", icon: "bi-linkedin" },
+    { name: "Indeed Worldwide", url: "https://www.indeed.com/worldwide", icon: "bi-globe" },
+    { name: "Glassdoor", url: "https://www.glassdoor.com", icon: "bi-building" },
+    { name: "Monster", url: "https://www.monster.com", icon: "bi-briefcase" },
+    { name: "Naukri (India)", url: "https://www.naukri.com", icon: "bi-search" },
+    { name: "Seek (Australia/NZ)", url: "https://www.seek.com.au", icon: "bi-briefcase-fill" },
+    { name: "StepStone (Europe)", url: "https://www.stepstone.com", icon: "bi-euro" },
+    { name: "CareerJet (150+ countries)", url: "https://www.careerjet.com", icon: "bi-airplane" },
+    { name: "ZipRecruiter", url: "https://www.ziprecruiter.com", icon: "bi-lightning" },
+    { name: "TotalJobs (UK)", url: "https://www.totaljobs.com", icon: "bi-geo-alt" }
 ];
 
-let universities = [], filteredUniversities = [], currentPage = 1, perPage = 20;
+// Variables
+let universities = [];
+let allUniversities = [];
+let currentPage = 1;
+let perPage = 20;
+let filteredUniversities = [];
 
+// Load universities from public API (~10,000 entries)
 async function loadUniversities() {
     try {
-        const res = await fetch('https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json');
-        const data = await res.json();
-        universities = data.filter(u => u.web_pages && u.web_pages.length).map(u => ({
-            name: u.name,
-            country: u.country,
-            website: u.web_pages[0]
-        }));
+        const response = await fetch('https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json');
+        if (!response.ok) throw new Error('Network error');
+        const data = await response.json();
+
+        allUniversities = data
+            .filter(uni => uni.web_pages && uni.web_pages.length > 0)
+            .map(uni => ({
+                name: uni.name,
+                country: uni.country,
+                website: uni.web_pages[0]
+            }));
+
+        universities = [...allUniversities];
         filteredUniversities = [...universities];
+
         populateCountries();
         renderUniversities();
         document.getElementById('loading').style.display = 'none';
         document.getElementById('universityList').style.display = 'flex';
-    } catch (e) {
-        document.getElementById('loading').innerHTML = '<p class="text-white">Using sample data (no internet)</p>';
+    } catch (err) {
+        console.error(err);
+        document.getElementById('loading').innerHTML = `
+            <div class="col-12 text-center text-white">
+                <h4>Unable to load full database</h4>
+                <p>Using sample data instead.</p>
+            </div>`;
+        // Fallback sample
         universities = filteredUniversities = [
-            {name:"Harvard University",country:"United States",website:"https://www.harvard.edu"},
-            {name:"University of Oxford",country:"United Kingdom",website:"https://www.ox.ac.uk"}
+            { name: "Harvard University", country: "United States", website: "https://www.harvard.edu" },
+            { name: "University of Oxford", country: "United Kingdom", website: "https://www.ox.ac.uk" },
+            { name: "University of Toronto", country: "Canada", website: "https://www.utoronto.ca" }
         ];
         renderUniversities();
     }
 }
 
+// Populate country dropdown
 function populateCountries() {
-    const set = [...new Set(universities.map(u => u.country))].sort();
+    const countries = [...new Set(universities.map(u => u.country))].sort();
     const select = document.getElementById('countryFilter');
-    set.forEach(c => {
+    countries.forEach(country => {
         const opt = document.createElement('option');
-        opt.value = c; opt.textContent = c;
+        opt.value = country;
+        opt.textContent = country;
         select.appendChild(opt);
     });
 }
 
+// Render university cards (NO FLAGS)
 function renderUniversities() {
-    const start = (currentPage-1)*perPage;
+    const start = (currentPage - 1) * perPage;
     const end = start + perPage;
     const pageData = filteredUniversities.slice(start, end);
+
     const container = document.getElementById('universityList');
     container.innerHTML = '';
 
-    if (!pageData.length) {
-        container.innerHTML = '<div class="col-12 text-center text-white"><h4>No results</h4></div>';
-        renderPagination();
+    if (filteredUniversities.length === 0) {
+        container.innerHTML = '<div class="col-12 text-center text-white"><h4>No results found.</h4></div>';
+        renderPagination(0);
         return;
     }
 
-    pageData.forEach(u => {
-        container.innerHTML += `
+    pageData.forEach(uni => {
+        const card = `
             <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
+                <div class="card university-card h-100">
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">${u.name}</h5>
-                        <p class="text-muted"><strong>Country:</strong> ${u.country}</p>
-                        <a href="${u.website}" target="_blank" class="btn btn-outline-primary mt-auto">
+                        <h5 class="card-title mb-2">${uni.name}</h5>
+                        <p class="text-muted mb-3"><strong>Country:</strong> ${uni.country}</p>
+                        <a href="${uni.website}" target="_blank" class="btn btn-outline-primary mt-auto">
                             Visit Website <i class="bi bi-box-arrow-up-right"></i>
                         </a>
                     </div>
                 </div>
-            </div>`;
+            </div>
+        `;
+        container.innerHTML += card;
     });
 
-    renderPagination();
+    renderPagination(Math.ceil(filteredUniversities.length / perPage));
 }
 
-// FIXED & CLEAN PAGINATION
-function renderPagination() {
-    const totalPages = Math.ceil(filteredUniversities.length / perPage);
-    const pagination = document.getElementById('pagination');
-    pagination.innerHTML = '';
+// Pagination
+function renderPagination(totalPages) {
+    const el = document.getElementById('pagination');
+    el.innerHTML = '';
 
     if (totalPages <= 1) return;
 
-    // Previous
-    pagination.innerHTML += `
-        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" ${currentPage === 1 ? '' : 'onclick="changePage('+(currentPage-1)+')'"}>Previous</a>
-        </li>`;
-
-    // Page numbers (show up to 7 buttons intelligently)
-    let startPage = Math.max(1, currentPage - 3);
-    let endPage = Math.min(totalPages, currentPage + 3);
-    if (endPage - startPage < 6) {
-        if (currentPage < 4) endPage = Math.min(totalPages, 7);
-        else startPage = Math.max(1, totalPages - 6);
+    if (currentPage > 1) {
+        el.innerHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${currentPage-1})">Previous</a></li>`;
     }
 
-    for (let i = startPage; i <= endPage; i++) {
-        pagination.innerHTML += `
-            <li class="page-item ${i === currentPage ? 'active' : ''}">
-                <a class="page-link" href="#" onclick="changePage(\( {i})"> \){i}</a>
-            </li>`;
+    const start = Math.max(1, currentPage - 2);
+    const end = Math.min(totalPages, currentPage + 2);
+    for (let i = start; i <= end; i++) {
+        el.innerHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+            <a class="page-link" href="#" onclick="changePage(\( {i})"> \){i}</a>
+        </li>`;
     }
 
-    // Next
-    pagination.innerHTML += `
-        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" ${currentPage === totalPages ? '' : 'onclick="changePage('+(currentPage+1)+')'"}>Next</a>
-        </li>`;
+    if (currentPage < totalPages) {
+        el.innerHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${currentPage+1})">Next</a></li>`;
+    }
 }
 
 function changePage(page) {
     currentPage = page;
     renderUniversities();
-    window.scrollTo({top: document.getElementById('universities').offsetTop - 100, behavior: 'smooth'});
+    window.scrollTo(0, document.getElementById('universities').offsetTop - 100);
 }
 
-// Filters & Search
+// Render Job Portals
+function renderJobPortals() {
+    const container = document.querySelector('#jobs .row');
+    jobPortals.forEach(p => {
+        container.innerHTML += `
+            <div class="col">
+                <div class="card job-portal-card text-white h-100 text-center p-4">
+                    <i class="bi ${p.icon} display-1 mb-3"></i>
+                    <h4>${p.name}</h4>
+                    <a href="${p.url}" target="_blank" class="btn btn-light mt-3">
+                        Open Portal <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// Search & Filters
 document.getElementById('globalSearch').addEventListener('input', e => {
     const q = e.target.value.toLowerCase();
-    filteredUniversities = universities.filter(u => 
+    filteredUniversities = universities.filter(u =>
         u.name.toLowerCase().includes(q) || u.country.toLowerCase().includes(q)
     );
     currentPage = 1;
@@ -246,8 +374,8 @@ document.getElementById('globalSearch').addEventListener('input', e => {
 });
 
 document.getElementById('countryFilter').addEventListener('change', e => {
-    const c = e.target.value;
-    filteredUniversities = c ? universities.filter(u => u.country === c) : universities;
+    const country = e.target.value;
+    filteredUniversities = country ? universities.filter(u => u.country === country) : universities;
     currentPage = 1;
     renderUniversities();
 });
@@ -258,36 +386,25 @@ document.getElementById('perPage').addEventListener('change', e => {
     renderUniversities();
 });
 
-// Dark mode
+// Dark Mode Toggle
 document.getElementById('themeToggle').addEventListener('click', () => {
-    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    const body = document.body;
+    const isDark = body.getAttribute('data-theme') === 'dark';
     const newTheme = isDark ? 'light' : 'dark';
-    document.body.setAttribute('data-theme', newTheme);
+    body.setAttribute('data-theme', newTheme);
     document.querySelector('#themeToggle i').className = newTheme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
     localStorage.setItem('theme', newTheme);
 });
+
+// Load saved theme
 const saved = localStorage.getItem('theme') || 'light';
 document.body.setAttribute('data-theme', saved);
 document.querySelector('#themeToggle i').className = saved === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
 
-// Job portals
-function renderJobPortals() {
-    const container = document.querySelector('#jobs .row');
-    jobPortals.forEach(p => {
-        container.innerHTML += `
-            <div class="col">
-                <div class="card job-portal-card text-white h-100 text-center p-4">
-                    <i class="bi ${p.icon} display-1 mb-3"></i>
-                    <h4>${p.name}</h4>
-                    <a href="${p.url}" target="_blank" class="btn btn-light mt-3">Open Portal</a>
-                </div>
-            </div>`;
-    });
-}
-
-// Init
+// Initialize
 loadUniversities();
 renderJobPortals();
+
 </script>
 </body>
 </html>
