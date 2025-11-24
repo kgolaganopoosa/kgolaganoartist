@@ -3,20 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scholarships - Coolie Links</title>
+    <title>Coolie Links</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <style>
-        .scholarship-card { transition: all 0.3s; }
-        .scholarship-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.15)!important; }
-        .badge-amount { font-size: 1.1em; font-weight: bold; }
-    </style>
 </head>
 <body>
     <!-- Fixed Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">Coolie Links</a>
+            <a class="navbar-brand" href="index.html">Coolie Links</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -25,206 +20,56 @@
                     <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="universities.html">Universities</a></li>
                     <li class="nav-item"><a class="nav-link" href="jobs.html">Jobs</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="scholarships.html">Scholarships</a></li>
                     <li class="nav-item"><a class="nav-link" href="cv.html">Create CV</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- Main Content with padding for fixed navbar -->
     <main class="container mt-5 pt-5">
-        <div class="text-center mb-5">
-            <h1 class="display-5 fw-bold text-primary">Scholarship Finder</h1>
-            <p class="lead">Find fully funded and partial scholarships worldwide — Bachelor's, Master's, PhD & more.</p>
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="display-4 mb-4">Welcome to Coolie Links</h1>
+                <p class="lead">Your gateway to global education and career opportunities. Apply to schools worldwide, find jobs effortlessly, and build your professional profile with our tools.</p>
+                <a href="universities.html" class="btn btn-primary btn-lg me-3">Explore Universities</a>
+                <a href="jobs.html" class="btn btn-success btn-lg me-3">Find Jobs</a>
+                <a href="cv.html" class="btn btn-info btn-lg">Create Your CV</a>
+            </div>
         </div>
-
-        <!-- Filters -->
-        <div class="card shadow mb-4">
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <input type="text" id="searchKeyword" class="form-control" placeholder="Search by name, country, or field...">
-                    </div>
-                    <div class="col-md-3">
-                        <select id="countryFilter" class="form-select">
-                            <option value="">All Countries</option>
-                            <option>United States</option>
-                            <option>United Kingdom</option>
-                            <option>Canada</option>
-                            <option>Australia</option>
-                            <option>Germany</option>
-                            <option>Netherlands</option>
-                            <option>Sweden</option>
-                            <option>China</option>
-                            <option>Japan</option>
-                            <option>Singapore</option>
-                            <option>France</option>
-                            <option>Switzerland</option>
-                            <option>Worldwide</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select id="levelFilter" class="form-select">
-                            <option value="">All Levels</option>
-                            <option>Bachelor's</option>
-                            <option>Master's</option>
-                            <option>PhD</option>
-                            <option>Postdoc</option>
-                            <option>Short Course</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <select id="fundingFilter" class="form-select">
-                            <option value="">Any Funding</option>
-                            <option>Fully Funded</option>
-                            <option>Partial Funding</option>
-                            <option>Tuition Waiver</option>
-                        </select>
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-mortarboard-fill display-1 text-primary"></i>
+                        <h5 class="card-title">Worldwide Universities</h5>
+                        <p class="card-text">Search and apply to over 10,000 universities and colleges globally.</p>
+                        <a href="universities.html" class="btn btn-primary">Start Searching</a>
                     </div>
                 </div>
-
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <small class="text-muted">Popular Fields:</small><br>
-                        <div class="btn-group-flex flex-wrap gap-2 mt-2">
-                            <button class="btn btn-outline-primary btn-sm" onclick="filterByField('All')">All Fields</button>
-                            <button class="btn btn-outline-primary btn-sm" onclick="filterByField('Engineering')">Engineering</button>
-                            <button class="btn btn-outline-primary btn-sm" onclick="filterByField('Computer Science')">Computer Science</button>
-                            <button class="btn btn-outline-primary btn-sm" onclick="filterByField('Medicine')">Medicine</button>
-                            <button class="btn btn-outline-primary btn-sm" onclick="filterByField('Business')">Business</button>
-                            <button class="btn btn-outline-primary btn-sm" onclick="filterByField('Social Sciences')">Social Sciences</button>
-                            <button class="btn btn-outline-primary btn-sm" onclick="filterByField('Arts')">Arts & Design</button>
-                        </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-briefcase-fill display-1 text-success"></i>
+                        <h5 class="card-title">Global Job Portals</h5>
+                        <p class="card-text">Access top job sites from around the world to kickstart your career.</p>
+                        <a href="jobs.html" class="btn btn-success">Browse Jobs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-file-earmark-person-fill display-1 text-info"></i>
+                        <h5 class="card-title">Downloadable CV Builder</h5>
+                        <p class="card-text">Fill out a simple form and generate a modern, professional resume.</p>
+                        <a href="cv.html" class="btn btn-info">Build CV</a>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Results Counter -->
-        <div id="resultsCount" class="mb-3 fw-bold text-primary"></div>
-
-        <!-- Scholarship Cards -->
-        <div id="scholarshipResults" class="row"></div>
-
-        <!-- No Results -->
-        <div id="noResults" class="text-center py-5" style="display:none;">
-            <i class="bi bi-emoji-frown display-1 text-muted"></i>
-            <h4 class="mt-3 text-muted">No scholarships found matching your criteria.</h4>
-            <p>Try adjusting your filters!</p>
-        </div>
     </main>
-
-    <script>
-        // Real & Updated Scholarship Database (2025–2026 Cycle)
-        const scholarships = [
-            {name:"Chevening Scholarships",country:"United Kingdom",level:"Master's",funding:"Fully Funded",amount:"£18,000+",field:"All Fields",deadline:"Nov 2025",link:"https://www.chevening.org"},
-            {name:"DAAD Scholarships",country:"Germany",level:"Master's, PhD",funding:"Fully Funded",amount:"€934/month + insurance",field:"All Fields",deadline:"Varies",link:"https://www.daad.de"},
-            {name:"Fulbright Foreign Student Program",country:"United States",level:"Master's, PhD",funding:"Fully Funded",amount:"Full tuition + stipend",field:"All Fields",deadline:"Feb–Oct 2025",link:"https://foreign.fulbrightonline.org"},
-            {name:"Erasmus Mundus Joint Masters",country:"Europe",level:"Master's",funding:"Fully Funded",amount:"€1,400/month + tuition",field:"All Fields",deadline:"Jan–Mar 2026",link:"https://erasmus-plus.ec.europa.eu"},
-            {name:"Australia Awards Scholarships",country:"Australia",level:"Bachelor's, Master's, PhD",funding:"Fully Funded",amount:"Full tuition + living",field:"All Fields",deadline:"Apr 2026",link:"https://www.dfat.gov.au/australia-awards"},
-            {name:"MEXT Scholarship",country:"Japan",level:"Bachelor's, Master's, PhD",funding:"Fully Funded",amount:"¥117,000–145,000/month",field:"All Fields",deadline:"May–Jun 2026",link:"https://www.mext.go.jp"},
-            {name:"CSC Scholarship (China)",country:"China",level:"Bachelor's, Master's, PhD",funding:"Fully Funded",amount:"CNY 3,000–3,500/month",field:"All Fields",deadline:"Mar 2026",link:"http://www.csc.edu.cn"},
-            {name:"Singapore International Graduate Award (SINGA)",country:"Singapore",level:"PhD",funding:"Fully Funded",amount:"SGD 2,700/month",field:"Science, Engineering",deadline:"Jun 1, 2026",link:"https://www.a-star.edu.sg/singa"},
-            {name:"Swiss Government Excellence Scholarships",country:"Switzerland",level:"PhD, Postdoc",funding:"Fully Funded",amount:"CHF 1,920/month",field:"All Fields",deadline:"Sep–Dec 2025",link:"https://www.sbfi.admin.ch"},
-            {name:"Gates Cambridge Scholarship",country:"United Kingdom",level:"Master's, PhD",funding:"Fully Funded",amount:"£18,744/year + fees",field:"All Fields",deadline:"Oct 2025",link:"https://www.gatescambridge.org"},
-            {name:"Rhodes Scholarship",country:"United Kingdom",level:"Master's, PhD",funding:"Fully Funded",amount:"£19,092/year + fees",field:"All Fields",deadline:"Jul–Oct 2025",link:"https://www.rhodeshouse.ox.ac.uk"},
-            {name:"Knight-Hennessy Scholars",country:"United States",level:"Master's, PhD",funding:"Fully Funded",amount:"Full tuition + $50k/year",field:"All Fields",deadline:"Oct 1, 2025",link:"https://knight-hennessy.stanford.edu"},
-            {name:"Clarendon Fund",country:"United Kingdom",level:"Master's, PhD",funding:"Fully Funded",amount:"£17,668/year + fees",field:"All Fields",deadline:"Jan 2026",link:"https://www.ox.ac.uk/clarendon"},
-            {name:"Commonwealth Scholarship",country:"United Kingdom",level:"Master's, PhD",funding:"Fully Funded",amount:"£1,347/month + airfare",field:"All Fields",deadline:"Oct 2025",link:"https://cscuk.fcdo.gov.uk"},
-            {name:"Turkiye Burslari",country:"Turkey",level:"Bachelor's, Master's, PhD",funding:"Fully Funded",amount:"TRY 3,500–6,500/month",field:"All Fields",deadline:"Feb 2026",link:"https://www.turkiyeburslari.gov.tr"},
-            {name:"Netherlands Orange Tulip Scholarship",country:"Netherlands",level:"Master's",funding:"Partial Funding",amount:"€5,000–25,000",field:"All Fields",deadline:"Mar–Apr 2026",link:"https://www.nesoindonesia.or.id"},
-            {name:"Eiffel Excellence Scholarship",country:"France",level:"Master's, PhD",funding:"Fully Funded",amount:"€1,181–1,700/month",field:"Engineering, Economics, Law, Political Science",deadline:"Jan 2026",link:"https://www.campusfrance.org"},
-            {name:"Vanier Canada Graduate Scholarships",country:"Canada",level:"PhD",funding:"Fully Funded",amount:"CAD 50,000/year",field:"All Fields",deadline:"Nov 2025",link:"https://vanier.gc.ca"},
-            {name:"Aga Khan Foundation Scholarship",country:"Worldwide",level:"Master's, PhD",funding:"Partial Funding",amount:"50% grant + 50% loan",field:"All Fields",deadline:"Mar 2026",link:"https://the.akdn/en/what-we-do/developing-human-capacity"},
-            {name:"Mastercard Foundation Scholars",country:"Worldwide",level:"Bachelor's, Master's",funding:"Fully Funded",amount:"Full support",field:"All Fields",deadline:"Varies",link:"https://mastercardfdn.org"}
-        ];
-
-        let filteredScholarships = [...scholarships];
-
-        function filterScholarships() {
-            const keyword = document.getElementById('searchKeyword').value.toLowerCase();
-            const country = document.getElementById('countryFilter').value;
-            const level = document.getElementById('levelFilter').value;
-            const funding = document.getElementById('fundingFilter').value;
-
-            filteredScholarships = scholarships.filter(s => {
-                const matchesKeyword = s.name.toLowerCase().includes(keyword) || 
-                                     s.country.toLowerCase().includes(keyword) || 
-                                     s.field.toLowerCase().includes(keyword);
-                const matchesCountry = !country || s.country === country || (country === "Worldwide" && s.country.includes("World"));
-                const matchesLevel = !level || s.level.includes(level);
-                const matchesFunding = !funding || s.funding.includes(funding);
-
-                return matchesKeyword && matchesCountry && matchesLevel && matchesFunding;
-            });
-
-            displayScholarships();
-        }
-
-        function filterByField(field) {
-            document.getElementById('searchKeyword').value = field === "All" ? "" : field;
-            filterScholarships();
-        }
-
-        function displayScholarships() {
-            const container = document.getElementById('scholarshipResults');
-            const count = document.getElementById('resultsCount');
-            const noResults = document.getElementById('noResults');
-
-            count.innerHTML = `<i class="bi bi-trophy"></i> ${filteredScholarships.length} scholarships found`;
-            container.innerHTML = '';
-
-            if (filteredScholarships.length === 0) {
-                noResults.style.display = 'block';
-                return;
-            }
-            noResults.style.display = 'none';
-
-            filteredScholarships.forEach(s => {
-                const fundingBadge = s.funding === "Fully Funded" 
-                    ? `<span class="badge bg-success badge-amount">Fully Funded</span>` 
-                    : `<span class="badge bg-warning text-dark">Partial Funding</span>`;
-
-                const card = document.createElement('div');
-                card.className = 'col-md-6 col-lg-4 mb-4';
-                card.innerHTML = `
-                    <div class="card scholarship-card h-100 shadow-sm border-0">
-                        <div class="card-body d-flex flex-column">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title mb-0">${s.name}</h5>
-                                ${fundingBadge}
-                            </div>
-                            <p class="text-muted small mb-2">
-                                <i class="bi bi-geo-alt"></i> ${s.country} • 
-                                <i class="bi bi-mortarboard"></i> ${s.level}
-                            </p>
-                            <p class="card-text">
-                                <strong>Coverage:</strong> ${s.amount}<br>
-                                <strong>Field:</strong> ${s.field}<br>
-                                <strong>Deadline:</strong> <span class="text-danger fw-bold">${s.deadline}</span>
-                            </p>
-                            <div class="mt-auto">
-                                <a href="${s.link}" target="_blank" class="btn btn-primary w-100">
-                                    Apply Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // Event Listeners
-        document.getElementById('searchKeyword').addEventListener('input', filterScholarships);
-        document.getElementById('countryFilter').addEventListener('change', filterScholarships);
-        document.getElementById('levelFilter').addEventListener('change', filterScholarships);
-        document.getElementById('fundingFilter').addEventListener('change', filterScholarships);
-
-        // Initial Display
-        displayScholarships();
-    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
