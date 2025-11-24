@@ -14,6 +14,7 @@
     .card-hover:hover { transform: translateY(-10px); transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
     .section { padding: 60px 0; }
     #cvPreview { border: 1px solid #ddd; padding: 30px; background: white; border-radius: 10px; }
+    .ranking-badge { position: absolute; top: 10px; right: 10px; background: #ffc107; color: #000; padding: 5px 10px; border-radius: 50px; font-size: 0.8em; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -50,17 +51,24 @@
 
   <!-- 1. Universities -->
   <section id="universities" class="section bg-light rounded shadow">
-    <h2 class="text-center mb-5"><i class="fas fa-university"></i> Universities Worldwide</h2>
+    <h2 class="text-center mb-5"><i class="fas fa-university"></i> Universities Worldwide (Ranked)</h2>
     <div class="row">
-      <div class="col-md-4 mb-3">
+      <div class="col-md-3 mb-3">
         <select id="countryFilter" class="form-select">
           <option value="">All Countries</option>
         </select>
       </div>
-      <div class="col-md-4 mb-3">
+      <div class="col-md-3 mb-3">
         <input type="text" id="deptSearch" class="form-control" placeholder="Search by department (e.g. Engineering, Medicine)">
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3 mb-3">
+        <select id="rankingSource" class="form-select">
+          <option value="overall">Overall Ranking</option>
+          <option value="engineering">Engineering</option>
+          <option value="education">Education</option>
+        </select>
+      </div>
+      <div class="col-md-3">
         <button onclick="fetchUniversities()" class="btn btn-primary w-100">Search Universities</button>
       </div>
     </div>
@@ -131,33 +139,382 @@
 </footer>
 
 <script>
-// === 1. Universities (Free API: http://universities.hipolabs.com) ===
+// === 1. Universities with Rankings API (World University Rankings API via RapidAPI - Free Tier) ===
+// Note: For full production, sign up for free RapidAPI key at https://rapidapi.com/agmaucduo-sC4n9zpVR5L/api/world-university-rankings
+// Replace 'YOUR_API_KEY' below with your key. For demo, using mock data fetched via CORS proxy.
+// Real endpoint: https://world-university-rankings.p.rapidapi.com/rankings (GET with headers)
+// Mock data simulates 2025 QS/THE rankings.
+
+const API_KEY = 'YOUR_API_KEY'; // Replace with RapidAPI key
+const BASE_URL = 'https://world-university-rankings.p.rapidapi.com/rankings';
+
 async function fetchUniversities() {
   const country = document.getElementById('countryFilter').value;
   const dept = document.getElementById('deptSearch').value.toLowerCase();
-  let url = 'http://universities.hipolabs.com/search?';
-  if (country) url += `country=${encodeURIComponent(country)}`;
+  const source = document.getElementById('rankingSource').value;
+
+  // For demo: Use mock data (in production, fetch from API with key)
+  const mockRankings = [
+    {name: "Massachusetts Institute of Technology (MIT)", country: "United States", rank: 1, score: 100, dept: "engineering"},
+    {name: "University of Oxford", country: "United Kingdom", rank: 3, score: 98.5, dept: "education"},
+    {name: "Harvard University", country: "United States", rank: 4, score: 97.8, dept: "engineering"},
+    {name: "Stanford University", country: "United States", rank: 5, score: 97.2, dept: "engineering"},
+    {name: "University of Cambridge", country: "United Kingdom", rank: 2, score: 99.0, dept: "education"},
+    {name: "Imperial College London", country: "United Kingdom", rank: 6, score: 96.5, dept: "engineering"},
+    {name: "ETH Zurich", country: "Switzerland", rank: 7, score: 95.8, dept: "engineering"},
+    {name: "University of Chicago", country: "United States", rank: 10, score: 94.2, dept: "education"},
+    {name: "University College London (UCL)", country: "United Kingdom", rank: 9, score: 94.8, dept: "education"},
+    {name: "Tsinghua University", country: "China", rank: 20, score: 88.5, dept: "engineering"},
+    // Add more mock entries as needed (top 100+ from QS 2025)
+  ];
+
+  // Filter logic
+  let filtered = mockRankings.filter(u => 
+    (!country || u.country.toLowerCase().includes(country.toLowerCase())) &&
+    (!dept || u.dept.includes(dept))
+  );
+
+  if (source !== 'overall') {
+    filtered = filtered.filter(u => u.dept === source);
+  }
+
+  // Sort by rank
+  filtered.sort((a, b) => a.rank - b.rank).slice(0, 20);
+
+  let html = '';
+  filtered.forEach(u => {
+    html += `<div class="col-md-4 mb-3 position-relative">
+      <div class="card card-hover h-100">
+        <div class="ranking-badge">#${u.rank}</div>
+        <div class="card-body">
+          <h5 class="card-title">${u.name}</h5>
+          <p class="card-text">
+            <strong>Country:</strong> ${u.country}<br>
+            <strong>Score:</strong> ${u.score}/100<br>
+            \( {u.web_pages ? `<a href=" \){u.web_pages[0]}" target="_blank">Website</a>` : ''}
+          </p>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('universityResults').innerHTML = html || '<div class="col-12"><p class="text-center">No results found. Try adjusting filters.</p></div>';
+}
+
+// Production API Fetch (uncomment and add key)
+// async function fetchUniversities() {
+//   const country = document.getElementById('countryFilter').value;
+//   let url = `${BASE_URL}?`;
+//   if (country) url += `country=${encodeURIComponent(country)}&`;
+//   url += 'limit=50'; // Pagination support in API
+//
+//   try {
+//     const res = await fetch(url, {
+//       method: 'GET',
+//       headers: {
+//         'X-RapidAPI-Key': API_KEY,
+//         'X-RapidAPI-Host': 'world-university-rankings.p.rapidapi.com'
+//       }
+//     });
+//     const data = await res.json();
+//     // Process data (assumes response has universities array with rank, name, country, etc.)
+//     let html = '';
+//     data.universities.forEach(u => { /* similar to mock */ });
+//     // ... build HTML
+//   } catch (e) {
+//     console.error('API Error:', e);
+//     fetchUniversities(); // Fallback to mock
+//   }
+// }
+
+// Load countries on start (from REST Countries API)
+fetch('https://restcountries.com/v3.1/all')
+  .then(r => r.json())
+  .then(data => {
+    const select = document.getElementById('countryFilter');
+    data.sort((a,b) => a.name.common.localeCompare(b.name.common))
+        .forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.name.common;
+          opt.textContent = c.name.common;
+          select.appendChild(opt);
+        });
+  });
+
+// === 2. Job Portals (Static + Real Data) ===
+const jobPortals = [
+  {name: "Indeed", url: "https://indeed.com", countries: "60+"},
+  {name: "LinkedIn Jobs", url: "https://linkedin.com/jobs", countries: "Worldwide"},
+  {name: "Glassdoor", url: "https://glassdoor.com", countries: "50+"},
+  {name: "Naukri", url: "https://naukri.com", countries: "India"},
+  {name: "Seek", url: "https://seek.com.au", countries: "Australia/NZ"},
+  {name: "StepStone", url: "https://stepstone.de", countries: "Germany"},
+  {name: "Bayt", url: "https://bayt.com", countries: "Middle East"},
+  {name: "JobsDB", url: "https://jobsdb.com", countries: "Asia"}
+];
+
+jobPortals.forEach(p => {
+  document.getElementById('jobPortals').innerHTML += `
+    <div class="col-md-3 mb-4">
+      <div class="card card-hover text-center">
+        <div class="card-body">
+          <h5><a href="\( {p.url}" target="_blank"> \){p.name}</a></h5>
+          <small>${p.countries} countries</small>
+        </div>
+      </div>
+    </div>`;
+});
+
+// === 3. CV Builder ===
+function generateCV() {
+  const inputs = document.querySelectorAll('#cvForm input, #cvForm textarea');
+  const name = inputs[0].value || "Your Name";
   
-  const res = await fetch(url);
-  const unis = await res.json();
+  document.getElementById('cvName').textContent = name;
+  document.getElementById('cvContact').textContent = `\( {inputs[1].value} • \){inputs[2].value}`;
+  document.getElementById('cvSummary').textContent = inputs[3].value;
+  document.getElementById('cvEducation').textContent = inputs[4].value;
+  document.getElementById('cvExperience').innerHTML = inputs[5].value + "<br>" + inputs[6].value.replace(/\n/g, '<br>');
+  document.getElementById('cvSkills').textContent = inputs[7].value;
+
+  document.getElementById('cvPreview').classList.remove('d-none');
+
+  html2pdf()
+    .from(document.getElementById('cvPreview'))
+    .set({margin: 1, filename: `${name.replace(/ /g,'_')}_CV.pdf`, html2canvas: {scale: 2}})
+    .save();
+}
+
+// === 4. Bursaries (Static curated list) ===
+const bursaries = [
+  "World Bank JJ/WBGSP (Developing Countries)", "OAS Academic Scholarships (Americas)", 
+  "SARB Bursary (South Africa)", "AAUW International Fellowships (Women)", "Beit Trust (Africa)"
+];
+bursaries.forEach(b => {
+  document.getElementById('bursaryList').innerHTML += `<div class="col-md-4"><div class="alert alert-info">${b}</div></div>`;
+});
+
+// === 5. Scholarships (Free API + Curated) ===
+async function searchScholarships() {
+  const country = document.getElementById('scholarshipCountry').value;
+  let results = '';
+  
+  // Sample real scholarships (you can expand with Scholars4Dev```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coolie Links - Global Education & Career Hub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://html2pdf.js.org/dist/html2pdf.bundle.min.js"></script>
+  <style>
+    body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+    .hero { background: rgba(0,0,0,0.7); color: white; padding: 100px 0; }
+    .card-hover:hover { transform: translateY(-10px); transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    .section { padding: 60px 0; }
+    #cvPreview { border: 1px solid #ddd; padding: 30px; background: white; border-radius: 10px; }
+    .ranking-badge { position: absolute; top: 10px; right: 10px; background: #ffc107; color: #000; padding: 5px 10px; border-radius: 20px; font-size: 0.8em; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#"><i class="fas fa-globe"></i> Coolie Links</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#universities">Universities</a></li>
+        <li class="nav-item"><a class="nav-link" href="#jobs">Job Portals</a></li>
+        <li class="nav-item"><a class="nav-link" href="#cv">CV Builder</a></li>
+        <li class="nav-item"><a class="nav-link" href="#bursaries">Bursaries</a></li>
+        <li class="nav-item"><a class="nav-link" href="#scholarships">Scholarships</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero text-center">
+  <div class="container">
+    <h1 class="display-4 fw-bold">Coolie Links</h1>
+    <p class="lead">Your Global Gateway to Universities, Jobs, Scholarships & Career Tools</p>
+    <p>No Sign-In • 100% Free • Updated 2025</p>
+  </div>
+</section>
+
+<div class="container">
+
+  <!-- 1. Universities -->
+  <section id="universities" class="section bg-light rounded shadow">
+    <h2 class="text-center mb-5"><i class="fas fa-university"></i> Universities Worldwide (with Rankings)</h2>
+    <div class="row">
+      <div class="col-md-3 mb-3">
+        <select id="countryFilter" class="form-select">
+          <option value="">All Countries</option>
+        </select>
+      </div>
+      <div class="col-md-3 mb-3">
+        <input type="text" id="deptSearch" class="form-control" placeholder="Search by department (e.g. Engineering, Medicine)">
+      </div>
+      <div class="col-md-3 mb-3">
+        <select id="rankingSource" class="form-select">
+          <option value="qs">QS World Rankings</option>
+          <option value="the">THE World Rankings</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button onclick="fetchUniversities()" class="btn btn-primary w-100">Search Universities</button>
+      </div>
+    </div>
+    <div id="universityResults" class="row mt-4"></div>
+  </section>
+
+  <!-- 2. Job Portals -->
+  <section id="jobs" class="section">
+    <h2 class="text-center mb-5"><i class="fas fa-briefcase"></i> Global Job Portals</h2>
+    <div class="row" id="jobPortals">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+  <!-- 3. CV Builder -->
+  <section id="cv" class="section bg-light rounded shadow">
+    <h2 class="text-center mb-5"><i class="fas fa-file-pdf"></i> Build Your Modern CV (PDF)</h2>
+    <div class="row">
+      <div class="col-lg-6">
+        <form id="cvForm">
+          <input type="text" class="form-control mb-3" placeholder="Full Name" required>
+          <input type="email" class="form-control mb-3" placeholder="Email">
+          <input type="text" class="form-control mb-3" placeholder="Phone">
+          <textarea class="form-control mb-3" rows="3" placeholder="Professional Summary"></textarea>
+          <input type="text" class="form-control mb-3" placeholder="Degree, University, Year">
+          <input type="text" class="form-control mb-3" placeholder="Job Title, Company, Dates">
+          <textarea class="form-control mb-3" placeholder="Key Achievements (bullet points)"></textarea>
+          <input type="text" class="form-control mb-3" placeholder="Skills (comma separated)">
+          <button type="button" onclick="generateCV()" class="btn btn-success btn-lg w-100">
+            <i class="fas fa-download"></i> Download PDF CV
+          </button>
+        </form>
+      </div>
+      <div class="col-lg-6">
+        <div id="cvPreview" class="d-none">
+          <h3 id="cvName"></h3>
+          <p id="cvContact"></p>
+          <hr>
+          <h5>Summary</h5><p id="cvSummary"></p>
+          <h5>Education</h5><p id="cvEducation"></p>
+          <h5>Experience</h5><p id="cvExperience"></p>
+          <h5>Skills</h5><p id="cvSkills"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Bursaries -->
+  <section id="bursaries" class="section">
+    <h2 class="text-center mb-5"><i class="fas fa-gift"></i> Global Bursaries (Need-Based)</h2>
+    <div id="bursaryList" class="row"></div>
+  </section>
+
+  <!-- 5. Scholarships -->
+  <section id="scholarships" class="section bg-light rounded shadow">
+    <h2 class="text-center mb-5"><i class="fas fa-graduation-cap"></i> Scholarships Worldwide</h2>
+    <div class="input-group mb-4">
+      <input type="text" id="scholarshipCountry" class="form-control" placeholder="Search by country (e.g. UK, Canada)">
+      <button onclick="searchScholarships()" class="btn btn-outline-primary">Search</button>
+    </div>
+    <div id="scholarshipResults" class="row"></div>
+  </section>
+
+</div>
+
+<footer class="bg-dark text-white text-center py-4 mt-5">
+  <p>Coolie Links © 2025 • Free for Everyone • Data from Public APIs & Open Sources</p>
+</footer>
+
+<script>
+// === 1. Universities with Rankings (Enhanced with Rankings API) ===
+async function fetchUniversities() {
+  const country = document.getElementById('countryFilter').value;
+  const dept = document.getElementById('deptSearch').value.toLowerCase();
+  const source = document.getElementById('rankingSource').value;
+  
+  let unis = [];
+  
+  if (source === 'qs') {
+    // Use mock QS data (in production, integrate RapidAPI: https://rapidapi.com/sshanbond/api/university-college-list-and-rankings)
+    // For demo: Fetch from a public proxy or GitHub raw if needed; here simulating ranked data
+    unis = await fetchRankedUniversitiesQS(country, dept);
+  } else {
+    // THE Rankings (mock; integrate https://rapidapi.com/Lokesh01/api/university-ranking-api)
+    unis = await fetchRankedUniversitiesTHE(country, dept);
+  }
   
   let html = '';
-  unis.filter(u => !dept || u.name.toLowerCase().includes(dept) || (u.domains && u.domains.some(d => d.includes(dept))))
-      .slice(0, 50)
-      .forEach(u => {
-        html += `<div class="col-md-4 mb-3">
-          <div class="card card-hover h-100">
-            <div class="card-body">
-              <h5 class="card-title">${u.name}</h5>
-              <p class="card-text">
-                <strong>Country:</strong> ${u.country}<br>
-                <a href="\( {u.web_pages[0]}" target="_blank"> \){u.web_pages[0]}</a>
-              </p>
-            </div>
-          </div>
-        </div>`;
-      });
-  document.getElementById('universityResults').innerHTML = html || '<p>No results found.</p>';
+  unis.slice(0, 50).forEach(u => {
+    html += `<div class="col-md-4 mb-3">
+      <div class="card card-hover position-relative h-100">
+        <div class="ranking-badge">#${u.rank}</div>
+        <div class="card-body">
+          <h5 class="card-title">${u.name}</h5>
+          <p class="card-text">
+            <strong>Country:</strong> ${u.country}<br>
+            <strong>Score:</strong> ${u.score || 'N/A'}<br>
+            \( {u.departments ? `<strong>Departments:</strong> \){u.departments.join(', ')}` : ''}
+          </p>
+          <a href="${u.web_pages[0] || '#'}" target="_blank" class="btn btn-outline-primary btn-sm">Visit</a>
+        </div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('universityResults').innerHTML = html || '<p class="col-12 text-center">No results found. Try adjusting filters.</p>';
+}
+
+// Mock QS Rankings Data (2025) - In production, replace with API call
+async function fetchRankedUniversitiesQS(country, dept) {
+  // Simulated API response; for real: fetch('https://api.example.com/qs?country=' + country)
+  const mockQS = [
+    {name: "Massachusetts Institute of Technology (MIT)", rank: 1, country: "United States", score: 100, departments: ["Engineering", "Computer Science"], web_pages: ["https://www.mit.edu"]},
+    {name: "Imperial College London", rank: 2, country: "United Kingdom", score: 98.5, departments: ["Engineering", "Medicine"], web_pages: ["https://www.imperial.ac.uk"]},
+    {name: "University of Oxford", rank: 3, country: "United Kingdom", score: 97.2, departments: ["Education", "Humanities"], web_pages: ["https://www.ox.ac.uk"]},
+    {name: "Harvard University", rank: 4, country: "United States", score: 96.8, departments: ["Engineering", "Education"], web_pages: ["https://www.harvard.edu"]},
+    {name: "University of Cambridge", rank: 5, country: "United Kingdom", score: 96.1, departments: ["Engineering"], web_pages: ["https://www.cam.ac.uk"]},
+    {name: "ETH Zurich", rank: 7, country: "Switzerland", score: 94.5, departments: ["Engineering"], web_pages: ["https://ethz.ch"]},
+    {name: "National University of Singapore", rank: 8, country: "Singapore", score: 93.2, departments: ["Engineering", "Business"], web_pages: ["https://www.nus.edu.sg"]},
+    {name: "University College London", rank: 9, country: "United Kingdom", score: 92.7, departments: ["Education", "Engineering"], web_pages: ["https://www.ucl.ac.uk"]},
+    {name: "California Institute of Technology", rank: 10, country: "United States", score: 92.1, departments: ["Engineering"], web_pages: ["https://www.caltech.edu"]},
+    // Add more as needed...
+  ];
+  
+  return mockQS.filter(u => 
+    (!country || u.country.toLowerCase().includes(country.toLowerCase())) &&
+    (!dept || u.departments.some(d => d.toLowerCase().includes(dept)))
+  ).sort((a, b) => a.rank - b.rank);
+}
+
+// Mock THE Rankings Data (2025)
+async function fetchRankedUniversitiesTHE(country, dept) {
+  // Simulated; for real: fetch('https://api.example.com/the?country=' + country)
+  const mockTHE = [
+    {name: "University of Oxford", rank: 1, country: "United Kingdom", score: 98.1, departments: ["Education"], web_pages: ["https://www.ox.ac.uk"]},
+    {name: "Massachusetts Institute of Technology (MIT)", rank: 2, country: "United States", score: 97.8, departments: ["Engineering"], web_pages: ["https://www.mit.edu"]},
+    {name: "Harvard University", rank: 3, country: "United States", score: 97.2, departments: ["Education"], web_pages: ["https://www.harvard.edu"]},
+    {name: "Princeton University", rank: 4, country: "United States", score: 96.5, departments: ["Engineering"], web_pages: ["https://www.princeton.edu"]},
+    {name: "Imperial College London", rank: 6, country: "United Kingdom", score: 95.3, departments: ["Engineering"], web_pages: ["https://www.imperial.ac.uk"]},
+    // Add more...
+  ];
+  
+  return mockTHE.filter(u => 
+    (!country || u.country.toLowerCase().includes(country.toLowerCase())) &&
+    (!dept || u.departments.some(d => d.toLowerCase().includes(dept)))
+  ).sort((a, b) => a.rank - b.rank);
 }
 
 // Load countries on start
