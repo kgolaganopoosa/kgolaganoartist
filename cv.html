@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coolie Links</title>
+    <title>Create CV - Coolie Links</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <body>
     <!-- Fixed Navigation Bar -->
@@ -20,57 +22,135 @@
                     <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="universities.html">Universities</a></li>
                     <li class="nav-item"><a class="nav-link" href="jobs.html">Jobs</a></li>
-                    <li class="nav-item"><a class="nav-link" href="cv.html">Create CV</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="cv.html">Create CV</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content with padding for fixed navbar -->
+    <!-- Main Content -->
     <main class="container mt-5 pt-5">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1 class="display-4 mb-4">Welcome to Coolie Links</h1>
-                <p class="lead">Your gateway to global education and career opportunities. Apply to schools worldwide, find jobs effortlessly, and build your professional profile with our tools. Universities now loaded with real data and latest rankings!</p>
-                <a href="universities.html" class="btn btn-primary btn-lg me-3">Explore Universities</a>
-                <a href="jobs.html" class="btn btn-success btn-lg me-3">Find Jobs</a>
-                <a href="cv.html" class="btn btn-info btn-lg">Create Your CV</a>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <i class="bi bi-mortarboard-fill display-1 text-primary"></i>
-                        <h5 class="card-title">Worldwide Universities</h5>
-                        <p class="card-text">Search and apply to over 10,000 universities and colleges globally, loaded from real data source with QS 2026 and THE 2025 rankings.</p>
-                        <a href="universities.html" class="btn btn-primary">Start Searching</a>
-                    </div>
+        <h1 class="mb-4">CV Builder</h1>
+        <p class="lead">Fill in your details to generate a modern CV. Click download to get your PDF.</p>
+        
+        <form id="cvForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="fullName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" required>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <i class="bi bi-briefcase-fill display-1 text-success"></i>
-                        <h5 class="card-title">Global Job Portals</h5>
-                        <p class="card-text">Access top job sites from around the world to kickstart your career.</p>
-                        <a href="jobs.html" class="btn btn-success">Browse Jobs</a>
-                    </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="tel" class="form-control" id="phone" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="address" class="form-label">Physical Address</label>
+                    <input type="text" class="form-control" id="address" required>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <i class="bi bi-file-earmark-person-fill display-1 text-info"></i>
-                        <h5 class="card-title">Downloadable CV Builder</h5>
-                        <p class="card-text">Fill out a simple form and generate a modern, professional resume.</p>
-                        <a href="cv.html" class="btn btn-info">Build CV</a>
-                    </div>
-                </div>
+            <div class="mb-3">
+                <label for="education" class="form-label">Education</label>
+                <textarea class="form-control" id="education" rows="3" placeholder="e.g., Bachelor's in Computer Science, University XYZ, 2020-2024"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="experience" class="form-label">Work Experience</label>
+                <textarea class="form-control" id="experience" rows="3" placeholder="e.g., Software Developer, ABC Corp, 2024-Present"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="skills" class="form-label">Skills</label>
+                <textarea class="form-control" id="skills" rows="2" placeholder="e.g., JavaScript, Python, Leadership"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="generateCV()">Generate & Download CV</button>
+        </form>
+
+        <!-- CV Preview (hidden initially) -->
+        <div id="cvPreview" class="mt-5" style="display: none;">
+            <h2>Preview</h2>
+            <div id="cvContent" class="border p-4 bg-light">
+                <!-- Generated CV will appear here -->
             </div>
         </div>
     </main>
 
+    <script>
+        function generateCV() {
+            // Validate form
+            if (!document.getElementById('cvForm').checkValidity()) {
+                alert('Please fill all required fields.');
+                return;
+            }
+
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const education = document.getElementById('education').value;
+            const experience = document.getElementById('experience').value;
+            const skills = document.getElementById('skills').value;
+
+            const cvHTML = `
+                <div class="cv-modern">
+                    <header class="text-center border-bottom pb-3 mb-4">
+                        <h1>${fullName}</h1>
+                        <p>\( {address} | \){phone} | ${email}</p>
+                    </header>
+                    <section>
+                        <h3>Education</h3>
+                        <p>${education}</p>
+                    </section>
+                    <section class="mt-3">
+                        <h3>Experience</h3>
+                        <p>${experience}</p>
+                    </section>
+                    <section class="mt-3">
+                        <h3>Skills</h3>
+                        <ul>
+                            \( {skills.split(',').map(skill => `<li> \){skill.trim()}</li>`).join('')}
+                        </ul>
+                    </section>
+                </div>
+            `;
+
+            document.getElementById('cvContent').innerHTML = cvHTML;
+            document.getElementById('cvPreview').style.display = 'block';
+
+            // Generate PDF
+            const { jsPDF } = window.jspdf;
+            html2canvas(document.getElementById('cvContent')).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF();
+                const imgWidth = 210;
+                const pageHeight = 295;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save(`${fullName.replace(/\s+/g, '_')}_CV.pdf`);
+            });
+        }
+    </script>
+    <style>
+        .cv-modern h1 { color: #007bff; font-size: 2.5em; }
+        .cv-modern h3 { color: #6c757d; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+        .cv-modern ul { list-style-type: none; padding: 0; }
+        .cv-modern li { background: #e9ecef; margin: 2px 0; padding: 5px; border-radius: 3px; }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
