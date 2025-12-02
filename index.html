@@ -16,10 +16,36 @@
         .hero {text-align:center;padding:80px 20px;}
         .card {background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:none;border-radius:15px;transition:0.3s;color:white;}
         .card:hover {transform:translateY(-10px);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
-        .flag {width:36px;height:24px;border-radius:4px;margin-right:8px;box-shadow:0 2px 6px rgba(0,0,0,0.4);}
         footer {background:rgba(0,0,0,0.8);color:#ccc;padding:40px 0;margin-top:100px;}
         .search-box {max-width:700px;margin:0 auto;}
         .section-title {font-size:1.8rem;margin-bottom:1.5rem;}
+
+        /* Category Buttons */
+        .category-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .cat-btn {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .cat-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-3px);
+        }
+        .cat-btn.active {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 15px rgba(255,107,107,0.6);
+        }
     </style>
 </head>
 <body>
@@ -42,15 +68,26 @@
     </div>
 </nav>
 
-<!-- Hero -->
+<!-- Hero Section -->
 <div class="hero">
     <h1 class="display-4 fw-bold">Your Future Starts Here – South Africa</h1>
     <p class="lead">Universities • TVET Colleges • Bursaries • Graduate Jobs – All in one place</p>
+    
+    <!-- Search Box -->
     <div class="search-box mt-4">
         <div class="input-group input-group-lg">
             <span class="input-group-text bg-white border-0">Search</span>
             <input type="text" id="globalSearch" class="form-control" placeholder="Search any university, TVET, bursary or job portal...">
         </div>
+    </div>
+
+    <!-- Category Buttons -->
+    <div class="category-btns">
+        <button class="cat-btn active" data-category="all">All</button>
+        <button class="cat-btn" data-category="universities">Universities</button>
+        <button class="cat-btn" data-category="tvet">Colleges</button>
+        <button class="cat-btn" data-category="bursaries">Bursaries</button>
+        <button class="cat-btn" data-category="jobs">Job Portals</button>
     </div>
 </div>
 
@@ -91,7 +128,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// ——— ALL 26 PUBLIC UNIVERSITIES ———
+// ——— ALL DATA ———
 const universities = [
     {name:"University of Cape Town",city:"Cape Town",website:"https://www.uct.ac.za"},
     {name:"University of the Witwatersrand",city:"Johannesburg",website:"https://www.wits.ac.za"},
@@ -120,7 +157,6 @@ const universities = [
     {name:"Mangosuthu University of Technology",city:"Durban",website:"https://www.mut.ac.za"}
 ];
 
-// ——— ALL 50 REGISTERED TVET COLLEGES (DHET 2024) ———
 const tvetColleges = [
     {name:"Buffalo City TVET College",province:"Eastern Cape",website:"https://www.bccollege.co.za"},
     {name:"Eastcape Midlands TVET College",province:"Eastern Cape",website:"https://www.emcol.co.za"},
@@ -170,12 +206,10 @@ const tvetColleges = [
     {name:"Orbit TVET College",province:"North West",website:"https://www.orbitcollege.co.za"},
     {name:"Taletso TVET College",province:"North West",website:"https://www.taletso.edu.za"},
     {name:"Vuselela TVET College",province:"North West",website:"https://www.vuselelacollege.co.za"},
-    {name:"Ingwe TVET College",province:"Northern Cape",website:"https://ingwecollege.edu.za"},
     {name:"Northern Cape Rural TVET College",province:"Northern Cape",website:"https://ncrvet.com"},
     {name:"Northern Cape Urban TVET College",province:"Northern Cape",website:"https://www.ncutvet.edu.za"}
 ];
 
-// ——— BURSARIES ———
 const bursaries = [
     {name:"NSFAS",website:"https://www.nsfas.org.za",desc:"Covers tuition, accommodation, learning materials for universities & TVET"},
     {name:"Funza Lushaka Bursary",website:"https://www.funzalushaka.doe.gov.za",desc:"Full-cost bursary for teaching qualifications"},
@@ -186,7 +220,6 @@ const bursaries = [
     {name:"Moshal Scholarship",website:"https://moshalprogram.org",desc:"Full support for top students from disadvantaged backgrounds"}
 ];
 
-// ——— JOB PORTALS ———
 const jobPortals = [
     {name:"PNet",url:"https://www.pnet.co.za"},
     {name:"Careers24",url:"https://www.careers24.com"},
@@ -198,7 +231,13 @@ const jobPortals = [
     {name:"The Jobs Portal",url:"https://www.thejobsportal.co.za"}
 ];
 
-// ——— RENDER FUNCTION ———
+// Store original data
+const allUniversities = [...universities];
+const allTvet = [...tvetColleges];
+const allBursaries = [...bursaries];
+const allJobs = [...jobPortals];
+
+// Render Cards
 function renderCards(containerId, items, type) {
     const container = document.getElementById(containerId);
     container.innerHTML = "";
@@ -220,31 +259,56 @@ function renderCards(containerId, items, type) {
     });
 }
 
-// ——— GLOBAL SEARCH ———
-document.getElementById("globalSearch").addEventListener("input", function() {
-    const q = this.value.toLowerCase();
-    const filteredUni = universities.filter(u => u.name.toLowerCase().includes(q) || u.city.toLowerCase().includes(q));
-    const filteredTvet = tvetColleges.filter(t => t.name.toLowerCase().includes(q) || t.province.toLowerCase().includes(q));
-    const filteredBurs = bursaries.filter(b => b.name.toLowerCase().includes(q) || b.desc.toLowerCase().includes(q));
-    const filteredJobs = jobPortals.filter(j => j.name.toLowerCase().includes(q));
-    
-    renderCards("universityList", filteredUni, "university");
-    renderCards("tvetList", filteredTvet, "tvet");
-    renderCards("bursaryList", filteredBurs, "bursary");
-    renderCards("jobList", filteredJobs, "job");
+// Filter Function (Search + Category)
+const searchInput = document.getElementById("globalSearch");
+const catButtons = document.querySelectorAll(".cat-btn");
+
+function applyFilters() {
+    const query = searchInput.value.toLowerCase();
+    const activeCat = document.querySelector(".cat-btn.active").dataset.category;
+
+    let uni = allUniversities.filter(u => u.name.toLowerCase().includes(query) || u.city.toLowerCase().includes(query));
+    let tvet = allTvet.filter(t => t.name.toLowerCase().includes(query) || t.province.toLowerCase().includes(query));
+    let burs = allBursaries.filter(b => b.name.toLowerCase().includes(query) || (b.desc && b.desc.toLowerCase().includes(query)));
+    let jobs = allJobs.filter(j => j.name.toLowerCase().includes(query));
+
+    if (activeCat !== "all") {
+        if (activeCat === "universities") { tvet = []; burs = []; jobs = []; }
+        else if (activeCat === "tvet") { uni = []; burs = []; jobs = []; }
+        else if (activeCat === "bursaries") { uni = []; tvet = []; jobs = []; }
+        else if (activeCat === "jobs") { uni = []; tvet = []; burs = []; }
+    }
+
+    renderCards("universityList", uni, "university");
+    renderCards("tvetList", tvet, "tvet");
+    renderCards("bursaryList", burs, "bursary");
+    renderCards("jobList", jobs, "job");
+}
+
+// Event Listeners
+searchInput.addEventListener("input", applyFilters);
+
+catButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        catButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        applyFilters();
+    });
 });
 
-// Initial load
+// Initial Render
 renderCards("universityList", universities, "university");
 renderCards("tvetList", tvetColleges, "tvet");
 renderCards("bursaryList", bursaries, "bursary");
 renderCards("jobList", jobPortals, "job");
 
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener("click", function(e){
-    e.preventDefault();
-    document.querySelector(this.getAttribute("href")).scrollIntoView({behavior:"smooth"});
-}));
+// Smooth Scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener("click", function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute("href")).scrollIntoView({behavior: "smooth"});
+    });
+});
 </script>
 </body>
 </html>
