@@ -1,1 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong Web Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid #fff;
+            background: #111;
+        }
+        .instructions {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #fff;
+            font-size: 14px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <div>Player 1 (Left): W ↑ / S ↓</div>
+        <div>Player 2 (Right): ↑ / ↓ arrows</div>
+        <div>First to 5 wins!</div>
+    </div>
+    <canvas id="pongCanvas" width="800" height="600"></canvas>
 
+    <script>
+        const canvas = document.getElementById('pongCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Game variables
+        const paddleWidth = 10;
+        const paddleHeight = 100;
+        const ballSize = 10;
+        const paddleSpeed = 6;
+        const ballSpeed = 5;
+
+        let leftPaddle = {
+            x: 10,
+            y: (canvas.height - paddleHeight) / 2,
+            score: 0
+        };
+
+        let rightPaddle = {
+            x: canvas.width - paddleWidth - 10,
+            y: (canvas.height - paddleHeight) / 2,
+            score: 0
+        };
+
+        let ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            dx: ballSpeed,
+            dy: ballSpeed * 0.7, // Slight angle
+            radius: ballSize / 2
+        };
+
+        let keys = {};
+
+        // Event listeners
+        document.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        // Reset ball position
+        function resetBall() {
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+            ball.dx = ballSpeed * (Math.random() > 0.5 ? 1 : -1);
+            ball.dy = (Math.random() - 0.5) * 2 * ballSpeed * 0.7;
+        }
+
+        // Update game logic
+        function update() {
+            // Move paddles
+            if (keys['w'] && leftPaddle.y > 0) {
+                leftPaddle.y -= paddleSpeed;
+            }
+            if (keys['s'] && leftPaddle.y < canvas.height - paddleHeight) {
+                leftPaddle.y += paddleSpeed;
+            }
+            if (keys['arrowup'] && rightPaddle.y > 0) {
+                rightPaddle.y -= paddleSpeed;
+            }
+            if (keys['arrowdown'] && rightPaddle.y < canvas.height - paddleHeight) {
+                rightPaddle.y += paddleSpeed;
+            }
+
+            // Move ball
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            // Ball collision with top/bottom
+            if (ball.y - ball.radius <= 0 || ball.y + ball.radius >= canvas.height) {
+                ball.dy = -ball.dy;
+            }
+
+            // Ball collision with left paddle
+            if (ball.x - ball.radius <= leftPaddle.x + paddleWidth &&
+                ball.y >= leftPaddle.y && ball.y <= leftPaddle.y + paddleHeight) {
+                ball.dx = -ball.dx;
+                ball.dx *= 1.05; // Speed up slightly
+                ball.dy += (ball.y - (leftPaddle.y + paddleHeight / 2)) * 0.1;
+            }
+
+            // Ball collision with right paddle
+            if (ball.x + ball.radius >= rightPaddle.x &&
+                ball.y >= rightPaddle.y && ball.y <= rightPaddle.y + paddleHeight) {
+                ball.dx = -ball.dx;
+                ball.dx *= 1.05; // Speed up slightly
+                ball.dy += (ball.y - (rightPaddle.y + paddleHeight / 2)) * 0.1;
+            }
+
+            // Scoring
+            if (ball.x < 0) {
+                rightPaddle.score++;
+                resetBall();
+            } else if (ball.x > canvas.width) {
+                leftPaddle.score++;
+                resetBall();
+            }
+
+            // Check win condition
+            if (leftPaddle.score >= 5 || rightPaddle.score >= 5) {
+                // Pause briefly then reset scores
+                setTimeout(() => {
+                    leftPaddle.score = 0;
+                    rightPaddle.score = 0;
+                    resetBall();
+                }, 1000);
+            }
+        }
+
+        // Draw everything
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = '#111';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw midline
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([10, 10]);
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw paddles
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(leftPaddle.x, leftPaddle.y, paddleWidth, paddleHeight);
+            ctx.fillRect(rightPaddle.x, rightPaddle.y, paddleWidth, paddleHeight);
+
+            // Draw ball
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw scores
+            ctx.font = '48px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(leftPaddle.score, canvas.width / 4, 60);
+            ctx.fillText(rightPaddle.score, (3 * canvas.width) / 4, 60);
+
+            // Win message
+            if (leftPaddle.score >= 5 || rightPaddle.score >= 5) {
+                ctx.font = '36px Arial';
+                ctx.fillStyle = '#ff0';
+                ctx.textAlign = 'center';
+                if (leftPaddle.score >= 5) {
+                    ctx.fillText('Left Wins!', canvas.width / 2, canvas.height / 2);
+                } else {
+                    ctx.fillText('Right Wins!', canvas.width / 2, canvas.height / 2);
+                }
+            }
+        }
+
+        // Game loop
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game
+        resetBall();
+        gameLoop();
+    </script>
+</body>
+</html>
