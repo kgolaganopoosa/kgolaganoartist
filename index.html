@@ -10,72 +10,164 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     
     <style>
-        /* Body and navbar colors changed to #1f3c73 and text set to white */
+        :root {
+            --bg: #000000;
+            --surface: #0d0d0d;
+            --card: #1a1a1a;
+            --text: #ffffff;
+            --text-muted: #bbbbbb;
+            --border: #444444;
+            --hover: #333333;
+        }
+
         body {
-            background: #1f3c73;
+            background: var(--bg);
             min-height: 100vh;
             font-family: 'Segoe UI', sans-serif;
             padding-top: 90px;
-            color: #ffffff;
+            color: var(--text);
         }
+
         .navbar {
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
-            background: #1f3c73 !important;
+            background: var(--surface) !important;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.8);
         }
+
         .navbar-brand {
             font-size: 2rem;
             font-weight: 800;
-            color: #ffffff;
-            /* remove gradient to keep brand text white */
-            -webkit-text-fill-color: #ffffff;
-            background: none;
-        }
-        .navbar .nav-link {
             color: #ffffff !important;
         }
-        .hero {text-align:center;padding:80px 20px;}
-        .card {background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:none;border-radius:15px;transition:0.3s;color:white;}
-        .card:hover {transform:translateY(-10px);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
-        footer {background:rgba(0,0,0,0.8);color:#ccc;padding:40px 0;margin-top:100px;}
-        .search-box {max-width:700px;margin:0 auto;}
-        .section-title {font-size:1.8rem;margin-bottom:1.5rem;}
+
+        .navbar .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+        }
+        .navbar .nav-link:hover { color: #cccccc !important; }
+
+        .hero {
+            text-align: center;
+            padding: 120px 20px 80px;
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .hero .lead {
+            font-size: 1.4rem;
+            color: #dddddd;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+            color: var(--text);
+        }
+        .card:hover {
+            transform: translateY(-14px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+            border-color: #777;
+        }
+
+        .card-title { color: #ffffff; }
+        .text-muted { color: var(--text-muted) !important; }
+
+        .btn-light {
+            background: var(--hover);
+            border: 1px solid #555;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .btn-light:hover {
+            background: #444;
+            border-color: #888;
+        }
+
+        footer {
+            background: var(--surface);
+            color: #999;
+            padding: 60px 0;
+            margin-top: 140px;
+            border-top: 1px solid var(--border);
+        }
+
+        .search-box { max-width: 780px; margin: 0 auto; }
+        .input-group-text {
+            background: #222;
+            border: 1px solid var(--border);
+            color: #fff;
+        }
+        .form-control {
+            background: #111;
+            border: 1px solid var(--border);
+            color: #fff;
+        }
+        .form-control::placeholder { color: #888; }
+        .form-control:focus {
+            background: #1a1a1a;
+            border-color: #666;
+            box-shadow: 0 0 0 0.2rem rgba(255,255,255,0.15);
+            color: #fff;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 2.5rem;
+        }
 
         /* Category Buttons */
         .category-btns {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 16px;
             justify-content: center;
-            margin-top: 30px;
+            margin-top: 50px;
         }
         .cat-btn {
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 10px 28px;
+            background: transparent;
+            border: 2px solid #666;
+            color: #ffffff;
+            padding: 14px 36px;
             border-radius: 50px;
             font-weight: 600;
             transition: all 0.3s;
         }
         .cat-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-3px);
+            background: var(--hover);
+            border-color: #aaa;
+            transform: translateY(-4px);
         }
         .cat-btn.active {
-            background: #ff6b6b;
-            border-color: #ff6b6b;
-            box-shadow: 0 0 15px rgba(255,107,107,0.6);
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+            box-shadow: 0 0 25px rgba(255,255,255,0.6);
+        }
+
+        .badge {
+            background: #444 !important;
+            font-size: 0.8rem;
         }
     </style>
 </head>
 <body>
 
-<!-- Floating Navbar -->
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Coolie Links SA</a>
@@ -88,26 +180,23 @@
                 <li class="nav-item"><a class="nav-link" href="#tvet">TVET Colleges</a></li>
                 <li class="nav-item"><a class="nav-link" href="#bursaries">Bursaries</a></li>
                 <li class="nav-item"><a class="nav-link" href="#jobs">Jobs</a></li>
-                <!--<li class="nav-item"><a class="nav-link" href="pingpong.html">Ping Pong Game</a></li>-->
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- Hero Section -->
+<!-- Hero -->
 <div class="hero">
-    <h1 class="display-4 fw-bold">Your Future Starts Here – South Africa</h1>
+    <h1 class="display-3 fw-bold">Your Future Starts Here – South Africa</h1>
     <p class="lead">Universities • TVET Colleges • Bursaries • Graduate Jobs – All in one place</p>
     
-    <!-- Search Box -->
-    <div class="search-box mt-4">
+    <div class="search-box mt-5">
         <div class="input-group input-group-lg">
-            <span class="input-group-text bg-white border-0">Search</span>
+            <span class="input-group-text">Search</span>
             <input type="text" id="globalSearch" class="form-control" placeholder="Search any university, TVET, bursary or job portal...">
         </div>
     </div>
 
-    <!-- Category Buttons -->
     <div class="category-btns">
         <button class="cat-btn active" data-category="all">All</button>
         <button class="cat-btn" data-category="universities">Universities</button>
@@ -137,7 +226,7 @@
         <div class="row row-cols-1 row-cols-md-3 g-4" id="bursaryList"></div>
     </section>
 
-    <!-- Job Portals -->
+    <!-- Jobs -->
     <section id="jobs" class="my-5">
         <h2 class="text-center section-title">Graduate & Student Job Portals</h2>
         <div class="row row-cols-2 row-cols-md-4 g-4" id="jobList"></div>
@@ -154,7 +243,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// ——— ALL DATA ———
+// Full Data
 const universities = [
     {name:"University of Cape Town",city:"Cape Town",website:"https://www.uct.ac.za"},
     {name:"University of the Witwatersrand",city:"Johannesburg",website:"https://www.wits.ac.za"},
@@ -257,20 +346,20 @@ const jobPortals = [
     {name:"The Jobs Portal",url:"https://www.thejobsportal.co.za"}
 ];
 
-// Store original data
+// Copies for filtering
 const allUniversities = [...universities];
 const allTvet = [...tvetColleges];
 const allBursaries = [...bursaries];
 const allJobs = [...jobPortals];
 
-// Render Cards
+// Render function
 function renderCards(containerId, items, type) {
     const container = document.getElementById(containerId);
     container.innerHTML = "";
     items.forEach(item => {
         const col = document.createElement("div");
         col.className = "col";
-        let badge = type === "tvet" ? `<span class="badge bg-success mb-2">${item.province}</span>` : "";
+        let badge = type === "tvet" ? `<span class="badge mb-2">${item.province}</span>` : "";
         let subtitle = type === "university" ? item.city : (type === "bursary" ? item.desc.substring(0,70)+"…" : "");
         col.innerHTML = `
             <div class="card h-100 text-center">
@@ -285,7 +374,7 @@ function renderCards(containerId, items, type) {
     });
 }
 
-// Filter Function (Search + Category)
+// Filtering
 const searchInput = document.getElementById("globalSearch");
 const catButtons = document.querySelectorAll(".cat-btn");
 
@@ -311,9 +400,8 @@ function applyFilters() {
     renderCards("jobList", jobs, "job");
 }
 
-// Event Listeners
+// Events
 searchInput.addEventListener("input", applyFilters);
-
 catButtons.forEach(btn => {
     btn.addEventListener("click", () => {
         catButtons.forEach(b => b.classList.remove("active"));
@@ -322,13 +410,13 @@ catButtons.forEach(btn => {
     });
 });
 
-// Initial Render
+// Initial render
 renderCards("universityList", universities, "university");
 renderCards("tvetList", tvetColleges, "tvet");
 renderCards("bursaryList", bursaries, "bursary");
 renderCards("jobList", jobPortals, "job");
 
-// Smooth Scroll
+// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener("click", function(e) {
         e.preventDefault();
