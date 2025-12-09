@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Modern Dark Resume Builder - Free PDF</title>
+  <title>Dark Elegant Resume Builder - Instant PDF</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -11,78 +11,78 @@
 
   <style>
     body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; }
-    .resume { width: 210mm; min-height: 297mm; background: white; overflow: hidden; }
-    .sidebar { background: #1a1f2e; }
-    .progress-bar { height: 6px; background: #333; border-radius: 3px; overflow: hidden; }
-    .progress { height: 100%; background: #fff; border-radius: 3px; }
-    .text-gray { color: #a0aec0; }
+    .resume { width: 210mm; min-height: 297mm; background: white; box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
+    .sidebar { background: #0f172a; color: white; }
+    .progress-bg { height: 7px; background: #334155; border-radius: 4px; }
+    .progress { height: 100%; background: white; border-radius: 4px; }
+    .section-title { position: relative; display: inline-block; }
+    .section-title::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 60px; height: 5px; background: #1e293b; }
   </style>
 </head>
 <body class="py-10">
 
-<div class="max-w-7xl mx-auto px-4">
-  <h1 class="text-4xl font-bold text-center mb-8 text-center text-gray-800">
-    Resume Builder — <span class="text-indigo-600">Dark Elegant Style</span>
+<div class="max-w-7xl mx-auto px-6">
+  <h1 class="text-4xl font-black text-center mb-10 text-gray-800">
+    Dark Elegant Resume Builder <span class="text-indigo-600">→ Free PDF</span>
   </h1>
 
   <div class="grid grid-cols-1 xl:grid-cols-2 gap-10">
     <!-- Form -->
-    <div class="bg-white rounded-2xl shadow-2xl p-8">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 max-h-screen overflow-y-auto">
       <form id="form" class="space-y-8">
 
-        <!-- Personal -->
+        <!-- Personal Info -->
         <div>
           <h3 class="text-xl font-bold text-indigo-600 mb-4">Personal Information</h3>
           <input type="text" data-key="name" placeholder="Full Name" class="w-full border rounded-lg px-4 py-3 mb-3"/>
-          <input type="text" data-key="title" placeholder="Job Title (e.g. Graphic Designer)" class="w-full border rounded-lg px-4 py-3 mb-3"/>
-          <textarea data-key="profile" rows="4" placeholder="Profile summary..." class="w-full border rounded-lg px-4 py-3"></textarea>
+          <input type="text" data-key="title" placeholder="Job Title" class="w-full border rounded-lg px-4 py-3 mb-3"/>
+          <textarea data-key="profile" rows="4" placeholder="Professional summary..." class="w-full border rounded-lg px-4 py-3"></textarea>
         </div>
 
         <!-- Contact -->
         <div>
-          <h3 class="text-xl font-bold text-indigo-600 mb-4">Contact</h3>
+          <h3 class="text-xl font-bold text-indigo-600 mb-4">Contact & Social</h3>
           <input type="email" data-key="email" placeholder="Email" class="w-full border rounded-lg px-4 py-3 mb-3"/>
           <input type="tel" data-key="phone" placeholder="Phone" class="w-full border rounded-lg px-4 py-3 mb-3"/>
-          <input type="text" data-key="address" placeholder="Address (New York City)" class="w-full border rounded-lg px-4 py-3 mb-3"/>
+          <input type="text" data-key="address" placeholder="City, Country" class="w-full border rounded-lg px-4 py-3 mb-3"/>
           <input type="url" data-key="linkedin" placeholder="LinkedIn URL" class="w-full border rounded-lg px-4 py-3 mb-3"/>
           <input type="url" data-key="twitter" placeholder="Twitter/X URL" class="w-full border rounded-lg px-4 py-3 mb-3"/>
           <input type="url" data-key="instagram" placeholder="Instagram URL" class="w-full border rounded-lg px-4 py-3"/>
         </div>
 
-        <!-- Photo -->
         <div>
-          <label class="block font-semibold mb-2">Profile Photo (recommended: square)</label>
-          <input type="file" id="photo" accept="image/*" class="w-full"/>
+          <label class="block font-semibold mb-2">Profile Photo (square recommended)</label>
+          <input type="file" id="photoInput" accept="image/*" class="w-full"/>
         </div>
 
         <!-- Experience -->
         <div>
-          <div class="flex justify-between mb-4">
+          <div class="flex justify-between items-center mb-4">
             <h3 class="text-xl font-bold text-indigo-600">Experience</h3>
-            <button type="button" id="addExp class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm">+ Add</button>
+            <button type="button" id="addExp" class="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm hover:bg-indigo-700">+ Add Experience</button>
           </div>
-          <div id="exp"></div>
+          <div id="expContainer"></div>
         </div>
 
         <!-- Education -->
         <div>
-          <div class="flex justify-between mb-4">
+          <div class="flex justify-between items-center mb-4">
             <h3 class="text-xl font-bold text-indigo-600">Education</h3>
-            <button type="button" id="addEdu" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm">+ Add</button>
+            <button type="button" id="addEdu" class="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm hover:bg-indigo-700">+ Add Education</button>
           </div>
-          <div id="edu"></div>
+          <div id="eduContainer"></div>
         </div>
 
-        <!-- Skills -->
-        <div>
-          <h3 class="text-xl font-bold text-indigo-600 mb-4">Skills (one per line, e.g. Photoshop 90)</h3>
-          <textarea data-key="skills" rows="6" placeholder="Photoshop 95&#10;Illustrator 85&#10;After Effects 80&#10;Figma 90" class="w-full border rounded-lg px-4 py-3"></textarea>
-        </div>
-
-        <!-- Languages -->
-        <div>
-          <h3 class="text-xl font-bold text-indigo-600 mb-4">Languages (Name Level%)</h3>
-          <textarea data-key="languages" rows="4" placeholder="English 100&#10;Spanish 70&#10;French 40" class="w-full border rounded-lg px-4 py-3"></textarea>
+        <!-- Skills & Languages -->
+        <div class="grid grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-xl font-bold text-indigo-600 mb-600 mb-3">Skills (Name Level%)</h3>
+            <textarea data-key="skills" rows="6" placeholder="Photoshop 95\nIllustrator 90\nFigma 85\nAfter Effects 80" class="w-full border rounded-lg px-4 py-3 text-sm"></textarea>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-indigo-600 mb-3">Languages (Name Level%)</h3>
+            <textarea data-key="languages" rows="6" placeholder="English 100\nSpanish 70\nFrench 40" class="w-full border rounded-lg px-4 py-3 text-sm"></textarea>
+          </div>
         </div>
 
       </form>
@@ -90,11 +90,11 @@
 
     <!-- Preview + Download -->
     <div class="space-y-6">
-      <button id="download" class="w-full bg-gradient-to-r from-indigo-600 to-purple-700 text-white font-bold text-xl py-5 rounded-xl shadow-lg hover:shadow-2xl transition">
-        Download PDF
+      <button id="downloadBtn" class="w-full bg-gradient-to-r from-indigo-700 to-purple-800 text-white font-bold text-xl py-6 rounded-xl shadow-2xl hover:shadow-purple-500/25 transition">
+        Download as PDF
       </button>
 
-      <div id="preview" class="resume mx-auto shadow-2xl"></div>
+      <div id="resumePreview" class="resume mx-auto"></div>
     </div>
   </div>
 </div>
@@ -103,141 +103,167 @@
   const { jsPDF } = window.jspdf;
   let photoURL = '';
 
-  document.getElementById('photo').onchange = e => {
-    if (e.target.files[0]) photoURL = URL.createObjectURL(e.target.files[0]);
-    render();
+  // Photo handler
+  document.getElementById('photoInput').onchange = (e) => {
+    if (e.target.files[0]) {
+      photoURL = URL.createObjectURL(e.target.files[0]);
+      renderResume();
+    }
   };
 
   // Add Experience
   document.getElementById('addExp').onclick = () => {
+    const container = document.getElementById('expContainer');
     const div = document.createElement('div');
-    div.className = "border border-gray-300 rounded-lg p-4 mb-4 bg-gray-50";
+    div.className = "border border-gray-300 rounded-lg p-5 mb-4 bg-gray-50 relative";
     div.innerHTML = `
-      <input placeholder="Job Title" class="w-full mb-2 px-3 py-2 border rounded"/>
-      <input placeholder="Company" class="w-full mb-2 px-3 py-2 border rounded"/>
-      <input placeholder="Years (e.g. 2020 – 2023)" class="w-full mb-2 px-3 py-2 border rounded"/>
-      <textarea placeholder="Description..." rows="3" class="w-full px-3 py-2 border rounded"></textarea>
-      <button type="button" class="text-red-600 text-sm mt-2 remove">Remove</button>`;
-    document.getElementById('exp').appendChild(div);
+      <input placeholder="Job Title" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
+      <input placeholder="Company" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
+      <input placeholder="Years (e.g. 2020 – 2023)" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
+      <textarea placeholder="Description (one bullet per line)" rows="3" class="w-full px-4 py-2 border rounded-lg"></textarea>
+      <button type="button" class="absolute top-3 right-3 text-red-600 hover:text-red-800 text-sm font-medium removeEntry">Remove</button>`;
+    container.appendChild(div);
   };
 
   // Add Education
   document.getElementById('addEdu').onclick = () => {
+    const container = document.getElementById('eduContainer');
     const div = document.createElement('div');
-    div.className = "border border-gray-300 rounded-lg p-4 mb-4 bg-gray-50";
+    div.className = "border border-gray-300 rounded-lg p-5 mb-4 bg-gray-50 relative";
     div.innerHTML = `
-      <input placeholder="Degree" class="w-full mb-2 px-3 py-2 border rounded"/>
-      <input placeholder="University" class="w-full mb-2 px-3 py-2 border rounded"/>
-      <input placeholder="Years" class="w-full mb-2 px-3 py-2 border rounded"/>
-      <button type="button" class="text-red-600 text-sm mt-2 remove">Remove</button>`;
-    document.getElementById('edu').appendChild(div);
+      <input placeholder="Degree" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
+      <input placeholder="University / School" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
+      <input placeholder="Years (e.g. 2016 – 2020)" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
+      <button type="button" class="absolute top-3 right-3 text-red-600 hover:text-red-800 text-sm font-medium removeEntry">Remove</button>`;
+    container.appendChild(div);
   };
 
-  // Remove buttons
-  document.addEventListener('click', e => {
-    if (e.target.classList.contains('remove')) e.target.parentElement.remove();
+  // Remove any entry
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('removeEntry')) {
+      e.target.parentElement.remove();
+      renderResume();
+    }
   });
 
-  const getData = () => {
+  // Get all form data
+  const getFormData = () => {
     const data = {};
-    document.querySelectorAll('[data-key]').forEach(el => data[el.dataset.key] = el.value);
+    document.querySelectorAll('[data-key]').forEach(el => {
+      data[el.dataset.key] = el.value;
+    });
     return data;
   };
 
-  const render = () => {
-    const d = getData();
+  // Render resume in real-time
+  const renderResume = () => {
+    const d = getFormData();
 
-    // Experience
-    const expHTML = Array.from(document.querySelectorAll('#exp > div')).map(block => {
+    // Experience entries
+    const experiences = Array.from(document.querySelectorAll('#expContainer > div')).map(block => {
       const inputs = block.querySelectorAll('input, textarea');
-      return `
-        <div class="mb-6">
-          <h4 class="font-bold text-gray-800">${inputs[0].value || 'Senior Designer'}</h4>
-          <p class="text-sm text-gray-600">\( {inputs[1].value || 'Company'} <span class="mx-2">•</span> \){inputs[2].value || '2020 – 2023'}</p>
-          <p class="text-sm mt-2 text-gray-700">${inputs[3].value.replace(/\n/g, '<br>') || 'Description here...'}</p>
-        </div>`;
-    }).join('');
+      return { title: inputs[0].value, company: inputs[1].value, years: inputs[2].value, desc: inputs[3].value };
+    });
 
-    // Education
-    const eduHTML = Array.from(document.querySelectorAll('#edu > div')).map(block => {
+    // Education entries
+    const educations = Array.from(document.querySelectorAll('#eduContainer > div')).map(block => {
       const inputs = block.querySelectorAll('input');
-      return `
-        <div class="mb-5">
-          <h4 class="font-bold">${inputs[0].value || 'Bachelor in Design'}</h4>
-          <p class="text-sm text-gray-600">\( {inputs[1].value || 'University'} | \){inputs[2].value || '2016 – 2020'}</p>
-        </div>`;
-    }).join('');
+      return { degree: inputs[0].value, school: inputs[1].value, years: inputs[2].value };
+    });
 
     // Skills
-    const skills = d.skills ? d.skills.split('\n').filter(s => s.trim()) : [];
+    const skills = d.skills ? d.skills.split('\n').map(l => l.trim()).filter(Boolean) : [];
     const skillsHTML = skills.map(line => {
-      const [name, percent = '80'] = line.split(' ');
-      return `<div class="flex items-center gap-3 mb-3"><span class="w-28 text-sm">\( {name}</span><div class="flex-1 progress-bar"><div class="progress" style="width: \){percent}%"></div></div></div>`;
+      const [name = 'Skill', level = '80'] = line.split(' ');
+      return `<div class="flex items-center gap-4 mb-4">
+        <span class="w-32 text-sm font-medium">${name}</span>
+        <div class="flex-1 progress-bg"><div class="progress" style="width:${level}%"></div></div>
+      </div>`;
     }).join('');
 
     // Languages
-    const langs = d.languages ? d.languages.split('\n').filter(s => s.trim()) : [];
-    const langHTML = langs.map(line => {
-      const [name, percent = '70'] = line.split(' ');
-      return `<div class="flex items-center gap-3 mb-3"><span class="w-24 text-sm">\( {name}</span><div class="flex-1 progress-bar"><div class="progress" style="width: \){percent}%"></div></div></div>`;
+    const languages = d.languages ? d.languages.split('\n').map(l => l.trim()).filter(Boolean) : [];
+    const langHTML = languages.map(line => {
+      const [name = 'Language', level = '70'] = line.split(' ');
+      return `<div class="flex items-center gap-4 mb-4">
+        <span class="w-28 text-sm">${name}</span>
+        <div class="flex-1 progress-bg"><div class="progress" style="width:${level}%"></div></div>
+      </div>`;
     }).join('');
 
-    document.getElementById('preview').innerHTML = `
-      <div class="resume grid grid-cols-3 text-sm">
-        <!-- Left Sidebar -->
-        <div class="sidebar text-white p-12 col-span-1 flex flex-col">
-          \( {photoURL ? `<img src=" \){photoURL}" class="w-full rounded-t-3xl object-cover mb-8" style="height:380px"/>` : '<div class="bg-gray-700 h-96 mb-8"></div>'}
+    document.getElementById('resumePreview').innerHTML = `
+      <div class="resume grid grid-cols-3 text-sm leading-relaxed">
+        <!-- Sidebar -->
+        <div class="sidebar p-12 flex flex-col">
+          \( {photoURL ? `<img src=" \){photoURL}" class="w-full object-cover rounded-b-3xl mb-10" style="height:420px"/>` : '<div class="bg-gray-700 h-96 mb-10 rounded-b-3xl"></div>'}
 
-          <h1 class="text-5xl font-black mt-8">${d.name || 'Henry Madison'}</h1>
-          <p class="text-lg opacity-90 mb-10">${d.title || 'Graphic Designer'}</p>
+          <h1 class="text-5xl font-black leading-none">${d.name || 'Your Name'}</h1>
+          <p class="text-xl opacity-90 mb-10">${d.title || 'Profession'}</p>
 
-          ${d.linkedin || d.twitter || d.instagram ? `
-          <div class="flex gap-4 text-2xl mb-12">
+          ${(d.linkedin || d.twitter || d.instagram) ? `
+          <div class="flex gap-6 text-3xl mb-12">
             ${d.linkedin ? '<i class="fab fa-linkedin"></i>' : ''}
             ${d.twitter ? '<i class="fab fa-twitter"></i>' : ''}
             ${d.instagram ? '<i class="fab fa-instagram"></i>' : ''}
           </div>` : ''}
 
-          <h3 class="text-xl font-bold border-b border-gray-600 pb-3 mb-6">Contact</h3>
-          \( {d.email ? `<p class="mb-2"><i class="fas fa-envelope mr-3"></i> \){d.email}</p>` : ''}
-          \( {d.phone ? `<p class="mb-2"><i class="fas fa-phone mr-3"></i> \){d.phone}</p>` : ''}
-          \( {d.address ? `<p class="mb-8"><i class="fas fa-map-marker-alt mr-3"></i> \){d.address}</p>` : ''}
+          <h3 class="text-xl font-bold border-b-2 border-gray-600 pb-4 mb-6">Contact</h3>
+          \( {d.email ? `<p class="mb-3"><i class="fas fa-envelope mr-3"></i> \){d.email}</p>` : ''}
+          \( {d.phone ? `<p class="mb-3"><i class="fas fa-phone mr-3"></i> \){d.phone}</p>` : ''}
+          \( {d.address ? `<p class="mb-10"><i class="fas fa-map-marker-alt mr-3"></i> \){d.address}</p>` : ''}
 
-          \( {langHTML ? `<h3 class="text-xl font-bold border-b border-gray-600 pb-3 mb-6">Languages</h3> \){langHTML}` : ''}
+          \( {langHTML ? `<h3 class="text-xl font-bold border-b-2 border-gray-600 pb-4 mb-6">Languages</h3> \){langHTML}` : ''}
         </div>
 
-        <!-- Right Side -->
-        <div class="col-span-2 p-12 bg-gray-50">
-          <h3 class="text-2xl font-bold border-b-4 border-gray-800 pb-3 mb-8 inline-block">Profile</h3>
-          <p class="text-gray-700 mb-12 leading-relaxed">${d.profile || 'Write your professional summary here...'}</p>
+        <!-- Main Content -->
+        <div class="col-span-2 bg-gray-50 p-12">
+          <h3 class="text-2xl font-bold section-title mb-8">Profile</h3>
+          <p class="text-gray-700 mb-12">${(d.profile || '').replace(/\n/g, '<br>') || 'Your professional summary goes here...'}</p>
 
-          \( {expHTML ? `<h3 class="text-2xl font-bold border-b-4 border-gray-800 pb-3 mb-8 inline-block">Experience</h3> \){expHTML}` : ''}
+          ${experiences.length ? `<h3 class="text-2xl font-bold section-title mb-8">Experience</h3>` : ''}
+          ${experiences.map(exp => `
+            <div class="mb-8">
+              <h4 class="font-bold text-lg">${exp.title || 'Job Title'}</h4>
+              <p class="text-gray-600">\( {exp.company || 'Company'} <span class="mx-2">•</span> \){exp.years || 'Dates'}</p>
+              <div class="mt-2 text-gray-700 text-sm leading-relaxed">${exp.desc ? exp.desc.replace(/\n/g, '<br>') : ''}</div>
+            </div>
+          `).join('')}
 
-          \( {eduHTML ? `<h3 class="text-2xl font-bold border-b-4 border-gray-800 pb-3 mb-8 inline-block">Education</h3> \){eduHTML}` : ''}
+          ${educations.length ? `<h3 class="text-2xl font-bold section-title mb-8">Education</h3>` : ''}
+          ${educations.map(edu => `
+            <div class="mb-7">
+              <h4 class="font-bold">${edu.degree || 'Degree'}</h4>
+              <p class="text-gray-600">\( {edu.school || 'University'} | \){edu.years || 'Years'}</p>
+            </div>
+          `).join('')}
 
-          \( {skillsHTML ? `<h3 class="text-2xl font-bold border-b-4 border-gray-800 pb-3 mb-8 inline-block">Expertise</h3> \){skillsHTML}` : ''}
+          \( {skillsHTML ? `<h3 class="text-2xl font-bold section-title mb-8">Expertise</h3> \){skillsHTML}` : ''}
         </div>
       </div>
     `;
-  };
 
-  // Live update
-  document.getElementById('form').addEventListener('input', render);
-  document.addEventListener('click', e => { if (e.target.classList.contains('remove')) { e.target.parentElement.remove(); render(); } });
+    // Trigger re-render on any input
+    document.querySelectorAll('input, textarea').forEach(el => {
+      el.removeEventListener('input', renderResume);
+      el.addEventListener('input', renderResume);
+    });
+  };
 
   // Download PDF
-  document.getElementById('download').onclick = async () => {
-    const element = document.getElementById('preview').firstElementChild;
-    const canvas = await html2canvas(element, { scale: 2 });
-    const img = canvas.toDataURL('image/png');
+  document.getElementById('downloadBtn').onclick = async () => {
+    const element = document.getElementById('resumePreview').firstElementChild;
+    const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+    const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF('p', 'mm', 'a4');
-    const width = pdf.internal.pageSize.getWidth();
-    const height = (canvas.height * width) / canvas.width;
-    pdf.addImage(img, 'PNG', 0, 0, width, height);
-    pdf.save((getData().name || 'Resume') + '.pdf');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save((getFormData().name || 'Resume') + '.pdf');
   };
 
-  render(); // initial
+  // Initial render + live update
+  renderResume();
+  document.getElementById('form').addEventListener('input', renderResume);
 </script>
 </body>
 </html>
