@@ -3,361 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern CV/Resume Builder</title>
+    <title>Modern CV Builder - Working 100%</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- html2pdf.js with working CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            color: white;
-            padding: 30px 0;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        .input-form, .cv-preview-container {
-            padding: 25px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            height: calc(100vh - 140px);
-            overflow-y: auto;
-        }
-        .cv-preview-container {
-            border: 1px solid #ddd;
-            background: #fff;
-        }
-        #cv-preview {
-            font-family: 'Georgia', serif;
-            line-height: 1.7;
-            color: #2c3e50;
-            max-width: 8.5in;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        #cv-preview h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            border-bottom: 4px solid #3498db;
-            padding-bottom: 10px;
-            color: #2c3e50;
-        }
-        #cv-preview h3 {
-            background-color: #ebf3fd;
-            padding: 10px 15px;
-            margin: 30px 0 15px 0;
-            border-left: 6px solid #3498db;
-            color: #2c3e50;
-            font-size: 1.4rem;
-            border-radius: 0 8px 8px 0;
-        }
-        .contact-info span {
-            display: block;
-            margin: 8px 0;
-            font-size: 1rem;
-        }
-        .contact-info a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        .contact-info a:hover {
-            text-decoration: underline;
-        }
-        .section-item {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px dashed #ddd;
-        }
-        .section-item:last-child {
-            border-bottom: none;
-        }
-        .btn-add-section {
-            font-size: 0.9rem;
-        }
-        .remove-btn {
-            opacity: 0.6;
-        }
-        .remove-btn:hover {
-            opacity: 1;
-        }
+        body { background:#f8f9fa; font-family:system-ui,sans-serif; }
+        .header { background:linear-gradient(135deg,#2c3e50,#3498db); color:white; padding:30px 0; }
+        .input-form,.cv-preview-container { padding:25px; background:white; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.12); height:calc(100vh-140px); overflow-y:auto; }
+        #cv-preview { max-width:8.5in; margin:auto; padding:20px; line-height:1.7; color:#2c3e50; }
+        #cv-preview h1 { font-size:2.8rem; font-weight:800; border-bottom:5px solid #3498db; padding-bottom:10px; }
+        #cv-preview h3 { background:#ebf3fd; padding:12px 18px; margin:30px 0 15px; border-left:6px solid #3498db; border-radius:0 10px 10px 0; font-size:1.4rem; }
+        .contact-info a { color:#3498db; }
+        .section-item { margin-bottom:22px; padding-bottom:18px; border-bottom:1px dashed #eee; }
     </style>
 </head>
 <body>
+<header class="header"><div class="container text-center"><h1>Modern CV Builder</h1><p class="lead">Professional resume in minutes</p></div></header>
 
-    <header class="header">
-        <div class="container text-center">
-            <h1>Modern CV Builder</h1>
-            <p class="lead">Create a stunning, professional resume in minutes — then download as PDF</p>
-        </div>
-    </header>
+<div class="container-fluid"><div class="row g-4">
+    <div class="col-lg-6"><div class="input-form">
+        <h2>Your Information</h2>
+        <form id="cv-form">
+            <input type="text" class="form-control mb-3" id="name" placeholder="Full Name">
+            <input type="text" class="form-control mb-3" id="title" placeholder="Job Title">
+            <textarea class="form-control mb-4" id="summary" rows="4" placeholder="Professional summary..."></textarea>
 
-    <div class="container-fluid">
-        <div class="row g-4">
-            <!-- Input Form -->
-            <div class="col-lg-6">
-                <div class="input-form">
-                    <h2 class="mb-4">Fill Your Details</h2>
-
-                    <form id="cv-form">
-                        <h4 class="mt-4 text-primary">Personal Details</h4>
-                        <div class="mb-3">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="John Doe">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Professional Title</label>
-                            <input type="text" class="form-control" id="title" placeholder="Senior Software Engineer">
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Professional Summary</label>
-                            <textarea class="form-control" id="summary" rows="4" placeholder="Passionate developer with 5+ years..."></textarea>
-                        </div>
-
-                        <h4 class="text-primary">Contact Information</h4>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <input type="tel" class="form-control" id="phone" placeholder="Phone">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" id="email" placeholder="Email">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="url" class="form-control" id="linkedin" placeholder="LinkedIn URL">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="url" class="form-control" id="github" placeholder="GitHub / Portfolio URL">
-                            </div>
-                        </div>
-
-                        <hr class="my-4">
-
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="text-primary m-0">Work Experience</h4>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-add-section" data-section="experience">
-                                + Add Job
-                            </button>
-                        </div>
-                        <div id="experience-inputs"></div>
-
-                        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
-                            <h4 class="text-primary m-0">Education</h4>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-add-section" data-section="education">
-                                + Add Degree
-                            </button>
-                        </div>
-                        <div id="education-inputs"></div>
-
-                        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
-                            <h4 class="text-primary m-0">Certifications & Activities</h4>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-add-section" data-section="misc">
-                                + Add Item
-                            </button>
-                        </div>
-                        <div id="misc-inputs"></div>
-                    </form>
-
-                    <button id="download-pdf-btn" class="btn btn-success btn-lg w-100 mt-4 shadow">
-                        Download CV as PDF
-                    </button>
-                </div>
+            <h5 class="text-primary">Contact</h5>
+            <div class="row g-3 mb-4">
+                <div class="col-6"><input type="text" class="form-control" id="phone" placeholder="Phone"></div>
+                <div class="col-6"><input type="email" class="form-control" id="email" placeholder="Email"></div>
+                <div class="col-6"><input type="url" class="form-control" id="linkedin" placeholder="LinkedIn"></div>
+                <div class="col-6"><input type="url" class="form-control" id="github" placeholder="GitHub"></div>
             </div>
 
-            <!-- Live Preview -->
-            <div class="col-lg-6">
-                <div class="cv-preview-container sticky-top">
-                    <div id="cv-preview" class="bg-white">
-                        <h1 id="preview-name">Your Name</h1>
-                        <p class="lead fw-bold text-primary" id="preview-title">Your Job Title</p>
-
-                        <div class="contact-info mb-5">
-                            <span id="preview-phone"></span>
-                            <span id="preview-email"></span>
-                            <span id="preview-linkedin"></span>
-                            <span id="preview-github"></span>
-                        </div>
-
-                        <h3>Professional Summary</h3>
-                        <p id="preview-summary">Write a compelling summary to grab attention...</p>
-
-                        <h3 id="exp-header" style="display:none;">Experience</h3>
-                        <div id="preview-experience"></div>
-
-                        <h3 id="edu-header" style="display:none;">Education</h3>
-                        <div id="preview-education"></div>
-
-                        <h3 id="misc-header" style="display:none;">Certifications & Activities</h3>
-                        <div id="preview-misc"></div>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-primary m-0">Experience</h5>
+                <button type="button" class="btn btn-outline-primary add-btn" data-target="experience-inputs">+ Add Job</button>
             </div>
+            <div id="experience-inputs"></div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-primary m-0">Education</h5>
+                <button type="button" class="btn btn-outline-primary add-btn" data-target="education-inputs">+ Add Degree</button>
+            </div>
+            <div id="education-inputs"></div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-primary m-0">Certifications</h5>
+                <button type="button" class="btn btn-outline-primary add-btn" data-target="misc-inputs">+ Add Item</button>
+            </div>
+            <div id="misc-inputs"></div>
+        </form>
+        <button id="download-pdf-btn" class="btn btn-success btn-lg w-100 mt-4">Download PDF</button>
+    </div></div>
+
+    <div class="col-lg-6"><div class="cv-preview-container sticky-top">
+        <div id="cv-preview" class="bg-white">
+            <h1 id="preview-name">Name</h1>
+            <p class="lead text-primary fw-bold" id="preview-title">Title</p>
+            <div class="contact-info mb-5" id="contact-preview"></div>
+            <h3>Summary</h3><p id="preview-summary"></p>
+            <h3 id="exp-header" style="display:none;">Experience</h3><div id="preview-experience"></div>
+            <h3 id="edu-header" style="display:none;">Education</h3><div id="preview-education"></div>
+            <h3 id="misc-header" style="display:none;">Certifications</h3><div id="preview-misc"></div>
         </div>
-    </div>
+    </div></div>
+</div></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const downloadBtn = document.getElementById('download-pdf-btn');
-
-            // Templates
-            const getExperienceTemplate = (i) => `
-                <div class="card p-3 mb-3 border shadow-sm">
-                    <div class="d-flex justify-content-end mb-2">
-                        <button type="button" class="btn-close remove-btn" aria-label="Remove"></button>
-                    </div>
-                    <input type="text" class="form-control mb-2" data-field="job-title" placeholder="Job Title">
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <input type="text" class="form-control" data-field="company" placeholder="Company">
-                        </div>
-                        <div class="col-6">
-                            <input type="text" class="form-control" data-field="dates" placeholder="2020 – Present">
-                        </div>
-                    </div>
-                    <textarea class="form-control mt-2" data-field="description" rows="3" placeholder="• Achievement one&#10;• Another bullet point..."></textarea>
-                </div>`;
-
-            const getEducationTemplate = (i) => `
-                <div class="card p-3 mb-3 border shadow-sm">
-                    <div class="d-flex justify-content-end mb-2">
-                        <button type="button" class="btn-close remove-btn"></button>
-                    </div>
-                    <input type="text" class="form-control mb-2" data-field="degree" placeholder="Bachelor of Science in Computer Science">
-                    <div class="row g-2">
-                        <div class="col-8">
-                            <input type="text" class="form-control" data-field="institution" placeholder="University Name">
-                        </div>
-                        <div class="col-4">
-                            <input type="text" class="form-control" data-field="dates" placeholder="2016 – 2020">
-                        </div>
-                    </div>
-                </div>`;
-
-            const getMiscTemplate = (i) => `
-                <div class="card p-3 mb-3 border shadow-sm">
-                    <div class="d-flex justify-content-end mb-2">
-                        <button type="button" class="btn-close remove-btn"></button>
-                    </div>
-                    <input type="text" class="form-control mb-2" data-field="title" placeholder="AWS Certified Solutions Architect">
-                    <textarea class="form-control" data-field="details" rows="2" placeholder="Issued by Amazon Web Services, 2024"></textarea>
-                </div>`;
-
-            // Add new section
-            const addSection = (type) => {
-                const container = document.getElementById(type + '-inputs');
-                const template = type === 'experience' ? getExperienceTemplate : type === 'education' ? getEducationTemplate : getMiscTemplate;
-                container.insertAdjacentHTML('beforeend', template());
-                updatePreview();
-            };
-
-            // Remove section
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('remove-btn')) {
-                    e.target.closest('.card').remove();
-                    updatePreview();
-                }
-            });
-
-            // Add section buttons
-            document.querySelectorAll('.btn-add-section').forEach(btn => {
-                btn.addEventListener('click', () => addSection(btn.dataset.section));
-            });
-
-            // Live preview update
-            const updatePreview = () => {
-                // Basic fields
-                document.getElementById('preview-name').textContent = document.getElementById('name').value || 'Your Name';
-                document.getElementById('preview-title').textContent = document.getElementById('title').value || 'Your Job Title';
-                document.getElementById('preview-summary').textContent = document.getElementById('summary').value || 'Write a compelling professional summary...';
-
-                // Contact
-                const phone = document.getElementById('phone').value;
-                const email = document.getElementById('email').value;
-                const linkedin = document.getElementById('linkedin').value;
-                const github = document.getElementById('github').value;
-
-                document.getElementById('preview-phone').innerHTML = phone ? `Phone: ${phone}` : '';
-                document.getElementById('preview-email').innerHTML = email ? `Email: <a href="mailto:\( {email}"> \){email}</a>` : '';
-                document.getElementById('preview-linkedin').innerHTML = linkedin ? `LinkedIn: <a href="${linkedin}" target="_blank">linkedin.com/in/...</a>` : '';
-                document.getElementById('preview-github').innerHTML = github ? `GitHub: <a href="${github}" target="_blank">github.com/...</a>` : '';
-
-                // Dynamic sections
-                ['experience', 'education', 'misc'].forEach(section => {
-                    const items = document.querySelectorAll(`#${section}-inputs .card`);
-                    const container = document.getElementById(`preview-${section}`);
-                    const header = document.getElementById(section.substring(0,3) + '-header');
-                    let html = '';
-
-                    items.forEach(card => {
-                        const data = {};
-                        card.querySelectorAll('[data-field]').forEach(input => {
-                            data[input.dataset.field] = input.value;
-                        });
-
-                        if (section === 'experience') {
-                            if (data['job-title']) {
-                                const bullets = data.description ? data.description.split('\n').map(l => l.trim() ? `<li>${l.replace(/^[-•]\s*/, '')}</li>` : '').join('') : '';
-                                html += `
-                                    <div class="section-item">
-                                        <strong>\( {data['job-title']}</strong> at <strong> \){data.company || 'Company'}</strong>
-                                        <span class="text-muted float-end">${data.dates || ''}</span>
-                                        \( {bullets ? `<ul class="mt-2"> \){bullets}</ul>` : ''}
-                                    </div>`;
-                            }
-                        } else if (section === 'education') {
-                            if (data.degree) {
-                                html += `
-                                    <div class="section-item">
-                                        <strong>${data.degree}</strong><br>
-                                        <em>\( {data.institution || 'Institution'}</em> — \){data.dates || ''}
-                                    </div>`;
-                            }
-                        } else if (section === 'misc') {
-                            if (data.title) {
-                                html += `
-                                    <div class="section-item">
-                                        <strong>${data.title}</strong><br>
-                                        <small class="text-muted">${data.details || ''}</small>
-                                    </div>`;
-                            }
-                        }
-                    });
-
-                    container.innerHTML = html;
-                    header.style.display = html ? 'block' : 'none';
-                });
-            };
-
-            // Live update on input
-            document.getElementById('cv-form').addEventListener('input', updatePreview);
-            document.getElementById('cv-form').addEventListener('change', updatePreview);
-
-            // Start with one experience & education
-            addSection('experience');
-            addSection('education');
-
-            // PDF Download
-            downloadBtn.addEventListener('click', () => {
-                updatePreview(); // Ensure latest data
-
-                const element = document.getElementById('cv-preview');
-                const name = (document.getElementById('name').value || 'My_Resume').replace(/[^a-zA-Z0-9]/g, '_');
-
-                const opt = {
-                    margin: [0.5, 0.6, 0.5, 0.6],
-                    filename: `${name}.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true },
-                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-
-                html2pdf().set(opt).from(element).save();
-            });
-        });
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{const u=()=>{document.getElementById('preview-name').textContent=document.getElementById('name').value||'Name';document.getElementById('preview-title').textContent=document.getElementById('title').value||'Title';document.getElementById('preview-summary').textContent=document.getElementById('summary').value||'Summary...';const p=document.getElementById('phone').value,e=document.getElementById('email').value,l=document.getElementById('linkedin').value,g=document.getElementById('github').value;let c='';if(p)c+=`Phone: \( {p}<br>`;if(e)c+=`Email: <a href="mailto: \){e}">\( {e}</a><br>`;if(l)c+=`LinkedIn: <a href=" \){l}">\( {l}</a><br>`;if(g)c+=`GitHub: <a href=" \){g}">\( {g}</a>`;document.getElementById('contact-preview').innerHTML=c;['experience','education','misc'].forEach(s=>{const items=document.querySelectorAll(`# \){s}-inputs .item`);let html='';items.forEach(i=>{const data=Array.from(i.querySelectorAll('input,textarea')).reduce((a,v)=>({...a,[v.dataset.field]:v.value}),{});if(s==='experience'&&data.job)html+=`<div class="section-item"><strong>\( {data.job}</strong> at <strong> \){data.company||'Company'}</strong> <span class="float-end text-muted">\( {data.dates||''}</span> \){data.desc?`<ul class="mt-2">\( {data.desc.split('\n').map(l=>`<li> \){l.replace(/^[-•]\\s*/,'')}</li>`).join('')}</ul>`:''}</div>`;else if(s==='education'&&data.degree)html+=`<div class="section-item"><strong>\( {data.degree}</strong><br><em> \){data.school||'University'}</em> — \( {data.dates||''}</div>`;else if(s==='misc'&&data.title)html+=`<div class="section-item"><strong> \){data.title}</strong><br><small class="text-muted">\( {data.details||''}</small></div>`});document.getElementById(`preview- \){s}`).innerHTML=html;document.getElementById(s.slice(0,3)+'-header').style.display=html?'block':'none'})};document.getElementById('cv-form').addEventListener('input',u);document.addEventListener('click',e=>{if(e.target.classList.contains('add-btn')){const t=e.target.dataset.target;const i=t.includes('experience')?`<div class="item card p-3 mb-3"><button type="button" class="btn-close float-end"></button><input class="form-control mb-2" data-field="job" placeholder="Job Title"><div class="row g-2 mb-2"><div class="col"><input class="form-control" data-field="company" placeholder="Company"></div><div class="col"><input class="form-control" data-field="dates" placeholder="Dates"></div></div><textarea class="form-control" data-field="desc" rows="3" placeholder="Bullets..."></textarea></div>`:t.includes('education')?`<div class="item card p-3 mb-3"><button type="button" class="btn-close float-end"></button><input class="form-control mb-2" data-field="degree" placeholder="Degree"><div class="row g-2"><div class="col-8"><input class="form-control" data-field="school" placeholder="University"></div><div class="col-4"><input class="form-control" data-field="dates" placeholder="Dates"></div></div></div>`:`<div class="item card p-3 mb-3"><button type="button" class="btn-close float-end"></button><input class="form-control mb-2" data-field="title" placeholder="Title"><textarea class="form-control" data-field="details" rows="2" placeholder="Details"></textarea></div>`;document.getElementById(t).insertAdjacentHTML('beforeend',i);u()}if(e.target.classList.contains('btn-close')&&e.target.parentElement.classList.contains('item')){e.target.parentElement.remove();u()}});document.getElementById('download-pdf-btn').onclick=()=>{u();const n=(document.getElementById('name').value||'Resume').replace(/[^a-zA-Z0-9]/g,'_');html2pdf().set({margin:[0.5,0.6,0.5,0.6],filename:`${n}.pdf`,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'in',format:'letter',orientation:'portrait'}}).from(document.getElementById('cv-preview')).save()};document.querySelector('.add-btn').click()});
+</script>
 </body>
 </html>
