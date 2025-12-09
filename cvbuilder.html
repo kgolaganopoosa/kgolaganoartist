@@ -2,307 +2,242 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modern Resume Builder – Instant PDF Download</title>
-
-  <!-- Tailwind CSS -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modern Dark Resume Builder - Free PDF</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-  <!-- html2canvas & jsPDF -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
-    body { font-family: 'Inter', system-ui, sans-serif; background: #f3f4f6; }
-    .resume-preview { width: 210mm; min-height: 297mm; background: white; }
-    .sidebar { background: linear-gradient(135deg, #1e40af, #1e3a8a); }
-    input, textarea, select { @apply border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:border-transparent; }
-    textarea { resize: vertical; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; }
+    .resume { width: 210mm; min-height: 297mm; background: white; overflow: hidden; }
+    .sidebar { background: #1a1f2e; }
+    .progress-bar { height: 6px; background: #333; border-radius: 3px; overflow: hidden; }
+    .progress { height: 100%; background: #fff; border-radius: 3px; }
+    .text-gray { color: #a0aec0; }
   </style>
 </head>
-<body class="min-h-screen py-8">
+<body class="py-10">
 
-  <div class="max-w-7xl mx-auto px-4">
-    <h1 class="text-4xl font-bold text-center mb-10 text-gray-800">
-      Modern Resume Builder <span class="text-blue-600">→ Free PDF Download</span>
-    </h1>
+<div class="max-w-7xl mx-auto px-4">
+  <h1 class="text-4xl font-bold text-center mb-8 text-center text-gray-800">
+    Resume Builder — <span class="text-indigo-600">Dark Elegant Style</span>
+  </h1>
 
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-      <!-- LEFT: Form -->
-      <div class="bg-white rounded-2xl shadow-xl p-8 overflow-y-auto max-h-screen">
-        <h2 class="text-2xl font-bold mb-6">Fill Your Information</h2>
-        <form id="resumeForm" class="space-y-8">
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-10">
+    <!-- Form -->
+    <div class="bg-white rounded-2xl shadow-2xl p-8">
+      <form id="form" class="space-y-8">
 
-          <!-- Personal Info -->
-          <div>
-            <h3 class="text-lg font-semibold text-blue-600 mb-4">Personal Details</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input type="text" data-key="fullName" placeholder="Full Name" required />
-              <input type="text" data-key="jobTitle" placeholder="Desired Job Title" />
-              <input type="email" data-key="email" placeholder="Email" />
-              <input type="tel" data-key="phone" placeholder="Phone" />
-              <input type="text" data-key="location" placeholder="City, Country" />
-              <input type="url" data-key="portfolio" placeholder="Portfolio Website" />
-              <input type="url" data-key="linkedin" placeholder="LinkedIn URL" />
-              <input type="url" data-key="github" placeholder="GitHub URL" />
-              <input type="url" data-key="twitter" placeholder="Twitter/X URL" />
-            </div>
-            <textarea data-key="summary" rows="4" placeholder="Professional Summary (3–5 sentences)" class="mt-4"></textarea>
-          </div>
-
-          <div>
-            <label class="block font-medium mb-2">Profile Photo (optional – square works best)</label>
-            <input type="file" id="photoUpload" accept="image/*" class="border rounded-lg" />
-          </div>
-
-          <!-- Experience -->
-          <div>
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-semibold text-blue-600">Work Experience</h3>
-              <button type="button" id="addExp" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">+ Add Experience</button>
-            </div>
-            <div id="expContainer"></div>
-          </div>
-
-          <!-- Education -->
-          <div>
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-semibold text-blue-600">Education</h3>
-              <button type="button" id="addEdu" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">+ Add Education</button>
-            </div>
-            <div id="eduContainer"></div>
-          </div>
-
-          <!-- Skills -->
-          <div>
-            <h3 class="text-lg font-semibold text-blue-600 mb-3">Skills (comma separated)</h3>
-            <textarea data-key="skills" rows="3" placeholder="React, TypeScript, Node.js, Python, Docker, AWS..."></textarea>
-          </div>
-
-          <!-- Languages -->
-          <div>
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-semibold text-blue-600">Languages</h3>
-              <button type="button" id="addLang" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm">+ Add Language</button>
-            </div>
-            <div id="langContainer"></div>
-          </div>
-
-          <!-- Extra Sections (Projects, Certifications, Awards, Volunteer) -->
-          <div>
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-semibold text-blue-600">Projects / Certifications / Awards / Volunteer</h3>
-              <button type="button" id="addExtra" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm">+ Add Item</button>
-            </div>
-            <div id="extraContainer"></div>
-          </div>
-
-        </form>
-      </div>
-
-      <!-- RIGHT: Preview + Download -->
-      <div class="space-y-6">
-        <div class="bg-white rounded-2xl shadow-xl p-6 text-center">
-          <button id="downloadBtn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold text-xl py-5 rounded-xl hover:from-blue-700 hover:to-indigo-800 transition">
-            Download Resume as PDF
-          </button>
+        <!-- Personal -->
+        <div>
+          <h3 class="text-xl font-bold text-indigo-600 mb-4">Personal Information</h3>
+          <input type="text" data-key="name" placeholder="Full Name" class="w-full border rounded-lg px-4 py-3 mb-3"/>
+          <input type="text" data-key="title" placeholder="Job Title (e.g. Graphic Designer)" class="w-full border rounded-lg px-4 py-3 mb-3"/>
+          <textarea data-key="profile" rows="4" placeholder="Profile summary..." class="w-full border rounded-lg px-4 py-3"></textarea>
         </div>
 
-        <div id="resumePreview" class="resume-preview mx-auto shadow-2xl overflow-hidden">
-          <!-- Resume renders here -->
+        <!-- Contact -->
+        <div>
+          <h3 class="text-xl font-bold text-indigo-600 mb-4">Contact</h3>
+          <input type="email" data-key="email" placeholder="Email" class="w-full border rounded-lg px-4 py-3 mb-3"/>
+          <input type="tel" data-key="phone" placeholder="Phone" class="w-full border rounded-lg px-4 py-3 mb-3"/>
+          <input type="text" data-key="address" placeholder="Address (New York City)" class="w-full border rounded-lg px-4 py-3 mb-3"/>
+          <input type="url" data-key="linkedin" placeholder="LinkedIn URL" class="w-full border rounded-lg px-4 py-3 mb-3"/>
+          <input type="url" data-key="twitter" placeholder="Twitter/X URL" class="w-full border rounded-lg px-4 py-3 mb-3"/>
+          <input type="url" data-key="instagram" placeholder="Instagram URL" class="w-full border rounded-lg px-4 py-3"/>
         </div>
-      </div>
+
+        <!-- Photo -->
+        <div>
+          <label class="block font-semibold mb-2">Profile Photo (recommended: square)</label>
+          <input type="file" id="photo" accept="image/*" class="w-full"/>
+        </div>
+
+        <!-- Experience -->
+        <div>
+          <div class="flex justify-between mb-4">
+            <h3 class="text-xl font-bold text-indigo-600">Experience</h3>
+            <button type="button" id="addExp class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm">+ Add</button>
+          </div>
+          <div id="exp"></div>
+        </div>
+
+        <!-- Education -->
+        <div>
+          <div class="flex justify-between mb-4">
+            <h3 class="text-xl font-bold text-indigo-600">Education</h3>
+            <button type="button" id="addEdu" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm">+ Add</button>
+          </div>
+          <div id="edu"></div>
+        </div>
+
+        <!-- Skills -->
+        <div>
+          <h3 class="text-xl font-bold text-indigo-600 mb-4">Skills (one per line, e.g. Photoshop 90)</h3>
+          <textarea data-key="skills" rows="6" placeholder="Photoshop 95&#10;Illustrator 85&#10;After Effects 80&#10;Figma 90" class="w-full border rounded-lg px-4 py-3"></textarea>
+        </div>
+
+        <!-- Languages -->
+        <div>
+          <h3 class="text-xl font-bold text-indigo-600 mb-4">Languages (Name Level%)</h3>
+          <textarea data-key="languages" rows="4" placeholder="English 100&#10;Spanish 70&#10;French 40" class="w-full border rounded-lg px-4 py-3"></textarea>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Preview + Download -->
+    <div class="space-y-6">
+      <button id="download" class="w-full bg-gradient-to-r from-indigo-600 to-purple-700 text-white font-bold text-xl py-5 rounded-xl shadow-lg hover:shadow-2xl transition">
+        Download PDF
+      </button>
+
+      <div id="preview" class="resume mx-auto shadow-2xl"></div>
     </div>
   </div>
+</div>
 
-  <script>
-    const { jsPDF } = window.jspdf;
+<script>
+  const { jsPDF } = window.jspdf;
+  let photoURL = '';
 
-    // Containers for dynamic entries
-    let experiences = [], educations = [], languages = [], extras = [];
-
-    // Render the resume in real time
-    const render = () => {
-      const form = document.getElementById('resumeForm');
-      const data = Object.fromEntries(new FormData(form).entries());
-
-      // Photo
-      const photoFile = document.getElementById('photoUpload').files[0];
-      const photoURL = photoFile ? URL.createObjectURL(photoFile) : '';
-
-      // Skills
-      const skills = data.skills ? data.skills.split(',').map(s => s.trim()).filter(Boolean) : [];
-      const skillHTML = skills.map(s => `
-        <div class="mb-3">
-          <div class="flex justify-between text-xs"><span>${s}</span><span>90%</span></div>
-          <div class="w-full bg-gray-300 rounded-full h-1.5"><div class="bg-blue-600 h-1.5 rounded-full w-[90%]"></div></div>
-        </div>`).join('');
-
-      // Dynamic sections
-      const expHTML = experiences.map(e => `
-        <div class="mb-6">
-          <h4 class="text-lg font-semibold text-blue-600">${e.jobTitle || 'Job Title'}</h4>
-          <p class="text-sm text-gray-600">\( {e.company || 'Company'} • \){e.start} – ${e.end || 'Present'}</p>
-          <ul class="list-disc ml-5 mt-2 text-sm space-y-1">\( {e.desc.split('\n').filter(l=>l).map(l=>`<li> \){l}</li>`).join('')}</ul>
-        </div>`).join('');
-
-      const eduHTML = educations.map(e => `
-        <div class="mb-5">
-          <h4 class="font-semibold">${e.degree || 'Degree'}</h4>
-          <p class="text-sm text-gray-600">\( {e.school || 'Institution'} | \){e.year || 'Year'}</p>
-        </div>`).join('');
-
-      const langHTML = languages.map(l => `
-        <div class="flex justify-between text-sm mb-1"><span>\( {l.name}</span><span class="text-gray-500"> \){l.level}</span></div>`).join('');
-
-      const extraHTML = extras.map(x => `
-        <div class="mb-5">
-          <h4 class="font-semibold text-blue-600">${x.title}</h4>
-          <p class="text-sm text-gray-600">\( {x.org || ''} \){x.date ? '• ' + x.date : ''}</p>
-          <p class="text-sm mt-1">${x.desc || ''}</p>
-        </div>`).join('');
-
-      document.getElementById('resumePreview').innerHTML = `
-        <div class="grid grid-cols-4 text-gray-800 h-full">
-          <!-- Sidebar -->
-          <div class="sidebar text-white p-10 col-span-1">
-            \( {photoURL ? `<img src=" \){photoURL}" class="w-40 h-40 rounded-full mx-auto object-cover border-4 border-white shadow-lg mb-6"/>` 
-                       : `<div class="w-40 h-40 bg-gray-400 rounded-full mx-auto mb-6"></div>`}
-            <h1 class="text-3xl font-bold text-center mb-8">${data.fullName || 'Your Name'}</h1>
-
-            <div class="space-y-8 text-sm">
-              <div>
-                <h3 class="font-bold border-b border-blue-300 pb-2 mb-3">Contact</h3>
-                \( {data.phone ? `<p><i class="fas fa-phone mr-2"></i> \){data.phone}</p>` : ''}
-                \( {data.email ? `<p><i class="fas fa-envelope mr-2"></i> \){data.email}</p>` : ''}
-                \( {data.location ? `<p><i class="fas fa-map-marker-alt mr-2"></i> \){data.location}</p>` : ''}
-                ${data.linkedin ? `<p><i class="fab fa-linkedin mr-2"></i>LinkedIn</p>` : ''}
-                ${data.github ? `<p><i class="fab fa-github mr-2"></i>GitHub</p>` : ''}
-                ${data.twitter ? `<p><i class="fab fa-twitter mr-2"></i>Twitter</p>` : ''}
-                ${data.portfolio ? `<p><i class="fas fa-globe mr-2"></i>Portfolio</p>` : ''}
-              </div>
-
-              \( {skills.length ? `<div><h3 class="font-bold border-b border-blue-300 pb-2 mb-3">Skills</h3> \){skillHTML}</div>` : ''}
-              \( {languages.length ? `<div><h3 class="font-bold border-b border-blue-300 pb-2 mb-3">Languages</h3> \){langHTML}</div>` : ''}
-            </div>
-          </div>
-
-          <!-- Main Content -->
-          <div class="col-span-3 bg-gray-50 p-12">
-            <h2 class="text-3xl font-bold text-blue-700 mb-3">${data.jobTitle || 'Your Profession'}</h2>
-            <p class="text-gray-700 mb-10 max-w-3xl">${data.summary || 'Your professional summary will appear here...'}</p>
-
-            \( {expHTML ? `<h3 class="text-2xl font-bold text-blue-800 mb-6 border-b-2 border-blue-200 pb-3">Experience</h3> \){expHTML}` : ''}
-            \( {eduHTML ? `<h3 class="text-2xl font-bold text-blue-800 mb-6 border-b-2 border-blue-200 pb-3 mt-12">Education</h3> \){eduHTML}` : ''}
-            \( {extraHTML ? `<h3 class="text-2xl font-bold text-blue-800 mb-6 border-b-2 border-blue-200 pb-3 mt-12">Projects & Achievements</h3> \){extraHTML}` : ''}
-          </div>
-        </div>
-      `;
-    };
-
-    // Add dynamic fields
-    const addField = (container, html) => {
-      const div = document.createElement('div');
-      div.className = "border border-dashed border-gray-400 rounded-lg p-5 mb-4 bg-gray-50 relative";
-      div.innerHTML = html + '<button type="button" class="absolute top-2 right-2 text-red-600 text-sm remove">Remove</button>';
-      container.appendChild(div);
-    };
-
-    document.getElementById('addExp').onclick = () => addField(document.getElementById('expContainer'), `
-      <input type="text" placeholder="Job Title" class="exp-job mb-2" />
-      <input type="text" placeholder="Company" class="exp-comp mb-2" />
-      <div class="grid grid-cols-2 gap-3">
-        <input type="text" placeholder="Start Date" class="exp-start" />
-        <input type="text" placeholder="End Date (or Present)" class="exp-end" />
-      </div>
-      <textarea placeholder="Key achievements and responsibilities..." class="exp-desc mt-3" rows="4"></textarea>
-    `);
-
-    document.getElementById('addEdu').onclick = () => addField(document.getElementById('eduContainer'), `
-      <input type="text" placeholder="Degree" class="edu-degree mb-2" />
-      <input type="text" placeholder="School / University" class="edu-school mb-2" />
-      <input type="text" placeholder="Year (e.g. 2019 – 2023)" class="edu-year" />
-    `);
-
-    document.getElementById('addLang').onclick = () => addField(document.getElementById('langContainer'), `
-      <div class="grid grid-cols-2 gap-3">
-        <input type="text" placeholder="Language" class="lang-name" />
-        <select class="lang-level">
-          <option>Native</option>
-          <option>Fluent</option>
-          <option>Professional</option>
-          <option>Intermediate</option>
-          <option>Basic</option>
-        </select>
-      </div>
-    `);
-
-    document.getElementById('addExtra').onclick = () => addField(document.getElementById('extraContainer'), `
-      <input type="text" placeholder="Title (Project, Certification, Award...)" class="extra-title mb-2" />
-      <input type="text" placeholder="Organization / Issuer" class="extra-org mb-2" />
-      <input type="text" placeholder="Date" class="extra-date mb-2" />
-      <textarea placeholder="Description" class="extra-desc" rows="3"></textarea>
-    `);
-
-    // Remove button
-    document.addEventListener('click', e => {
-      if (e.target.classList.contains('remove')) {
-        e.target.parentElement.remove();
-        updateData();
-        render();
-      }
-    });
-
-    // Update data arrays on any input
-    const updateData = () => {
-      experiences = Array.from(document.querySelectorAll('#expContainer > div')).map(d => ({
-        jobTitle: d.querySelector('.exp-job')?.value || '',
-        company: d.querySelector('.exp-comp')?.value || '',
-        start: d.querySelector('.exp-start')?.value || '',
-        end: d.querySelector('.exp-end')?.value || '',
-        desc: d.querySelector('.exp-desc')?.value || ''
-      }));
-
-      educations = Array.from(document.querySelectorAll('#eduContainer > div')).map(d => ({
-        degree: d.querySelector('.edu-degree')?.value || '',
-        school: d.querySelector('.edu-school')?.value || '',
-        year: d.querySelector('.edu-year')?.value || ''
-      }));
-
-      languages = Array.from(document.querySelectorAll('#langContainer > div')).map(d => ({
-        name: d.querySelector('.lang-name')?.value || '',
-        level: d.querySelector('.lang-level')?.value || ''
-      }));
-
-      extras = Array.from(document.querySelectorAll('#extraContainer > div')).map(d => ({
-        title: d.querySelector('.extra-title')?.value || '',
-        org: d.querySelector('.extra-org')?.value || '',
-        date: d.querySelector('.extra-date')?.value || '',
-        desc: d.querySelector('.extra-desc')?.value || ''
-      }));
-    };
-
-    // Live preview on input
-    document.getElementById('resumeForm').addEventListener('input', () => { updateData(); render(); });
-    document.getElementById('photoUpload').addEventListener('change', render);
-
-    // Download PDF
-    document.getElementById('downloadBtn').addEventListener('click', async () => {
-      const element = document.getElementById('resumePreview');
-      const canvas = await html2canvas(element, { scale: 2 });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`${document.querySelector('[data-key="fullName"]').value || 'My-Resume'}.pdf`);
-    });
-
-    // Initial render
+  document.getElementById('photo').onchange = e => {
+    if (e.target.files[0]) photoURL = URL.createObjectURL(e.target.files[0]);
     render();
-  </script>
+  };
+
+  // Add Experience
+  document.getElementById('addExp').onclick = () => {
+    const div = document.createElement('div');
+    div.className = "border border-gray-300 rounded-lg p-4 mb-4 bg-gray-50";
+    div.innerHTML = `
+      <input placeholder="Job Title" class="w-full mb-2 px-3 py-2 border rounded"/>
+      <input placeholder="Company" class="w-full mb-2 px-3 py-2 border rounded"/>
+      <input placeholder="Years (e.g. 2020 – 2023)" class="w-full mb-2 px-3 py-2 border rounded"/>
+      <textarea placeholder="Description..." rows="3" class="w-full px-3 py-2 border rounded"></textarea>
+      <button type="button" class="text-red-600 text-sm mt-2 remove">Remove</button>`;
+    document.getElementById('exp').appendChild(div);
+  };
+
+  // Add Education
+  document.getElementById('addEdu').onclick = () => {
+    const div = document.createElement('div');
+    div.className = "border border-gray-300 rounded-lg p-4 mb-4 bg-gray-50";
+    div.innerHTML = `
+      <input placeholder="Degree" class="w-full mb-2 px-3 py-2 border rounded"/>
+      <input placeholder="University" class="w-full mb-2 px-3 py-2 border rounded"/>
+      <input placeholder="Years" class="w-full mb-2 px-3 py-2 border rounded"/>
+      <button type="button" class="text-red-600 text-sm mt-2 remove">Remove</button>`;
+    document.getElementById('edu').appendChild(div);
+  };
+
+  // Remove buttons
+  document.addEventListener('click', e => {
+    if (e.target.classList.contains('remove')) e.target.parentElement.remove();
+  });
+
+  const getData = () => {
+    const data = {};
+    document.querySelectorAll('[data-key]').forEach(el => data[el.dataset.key] = el.value);
+    return data;
+  };
+
+  const render = () => {
+    const d = getData();
+
+    // Experience
+    const expHTML = Array.from(document.querySelectorAll('#exp > div')).map(block => {
+      const inputs = block.querySelectorAll('input, textarea');
+      return `
+        <div class="mb-6">
+          <h4 class="font-bold text-gray-800">${inputs[0].value || 'Senior Designer'}</h4>
+          <p class="text-sm text-gray-600">\( {inputs[1].value || 'Company'} <span class="mx-2">•</span> \){inputs[2].value || '2020 – 2023'}</p>
+          <p class="text-sm mt-2 text-gray-700">${inputs[3].value.replace(/\n/g, '<br>') || 'Description here...'}</p>
+        </div>`;
+    }).join('');
+
+    // Education
+    const eduHTML = Array.from(document.querySelectorAll('#edu > div')).map(block => {
+      const inputs = block.querySelectorAll('input');
+      return `
+        <div class="mb-5">
+          <h4 class="font-bold">${inputs[0].value || 'Bachelor in Design'}</h4>
+          <p class="text-sm text-gray-600">\( {inputs[1].value || 'University'} | \){inputs[2].value || '2016 – 2020'}</p>
+        </div>`;
+    }).join('');
+
+    // Skills
+    const skills = d.skills ? d.skills.split('\n').filter(s => s.trim()) : [];
+    const skillsHTML = skills.map(line => {
+      const [name, percent = '80'] = line.split(' ');
+      return `<div class="flex items-center gap-3 mb-3"><span class="w-28 text-sm">\( {name}</span><div class="flex-1 progress-bar"><div class="progress" style="width: \){percent}%"></div></div></div>`;
+    }).join('');
+
+    // Languages
+    const langs = d.languages ? d.languages.split('\n').filter(s => s.trim()) : [];
+    const langHTML = langs.map(line => {
+      const [name, percent = '70'] = line.split(' ');
+      return `<div class="flex items-center gap-3 mb-3"><span class="w-24 text-sm">\( {name}</span><div class="flex-1 progress-bar"><div class="progress" style="width: \){percent}%"></div></div></div>`;
+    }).join('');
+
+    document.getElementById('preview').innerHTML = `
+      <div class="resume grid grid-cols-3 text-sm">
+        <!-- Left Sidebar -->
+        <div class="sidebar text-white p-12 col-span-1 flex flex-col">
+          \( {photoURL ? `<img src=" \){photoURL}" class="w-full rounded-t-3xl object-cover mb-8" style="height:380px"/>` : '<div class="bg-gray-700 h-96 mb-8"></div>'}
+
+          <h1 class="text-5xl font-black mt-8">${d.name || 'Henry Madison'}</h1>
+          <p class="text-lg opacity-90 mb-10">${d.title || 'Graphic Designer'}</p>
+
+          ${d.linkedin || d.twitter || d.instagram ? `
+          <div class="flex gap-4 text-2xl mb-12">
+            ${d.linkedin ? '<i class="fab fa-linkedin"></i>' : ''}
+            ${d.twitter ? '<i class="fab fa-twitter"></i>' : ''}
+            ${d.instagram ? '<i class="fab fa-instagram"></i>' : ''}
+          </div>` : ''}
+
+          <h3 class="text-xl font-bold border-b border-gray-600 pb-3 mb-6">Contact</h3>
+          \( {d.email ? `<p class="mb-2"><i class="fas fa-envelope mr-3"></i> \){d.email}</p>` : ''}
+          \( {d.phone ? `<p class="mb-2"><i class="fas fa-phone mr-3"></i> \){d.phone}</p>` : ''}
+          \( {d.address ? `<p class="mb-8"><i class="fas fa-map-marker-alt mr-3"></i> \){d.address}</p>` : ''}
+
+          \( {langHTML ? `<h3 class="text-xl font-bold border-b border-gray-600 pb-3 mb-6">Languages</h3> \){langHTML}` : ''}
+        </div>
+
+        <!-- Right Side -->
+        <div class="col-span-2 p-12 bg-gray-50">
+          <h3 class="text-2xl font-bold border-b-4 border-gray-800 pb-3 mb-8 inline-block">Profile</h3>
+          <p class="text-gray-700 mb-12 leading-relaxed">${d.profile || 'Write your professional summary here...'}</p>
+
+          \( {expHTML ? `<h3 class="text-2xl font-bold border-b-4 border-gray-800 pb-3 mb-8 inline-block">Experience</h3> \){expHTML}` : ''}
+
+          \( {eduHTML ? `<h3 class="text-2xl font-bold border-b-4 border-gray-800 pb-3 mb-8 inline-block">Education</h3> \){eduHTML}` : ''}
+
+          \( {skillsHTML ? `<h3 class="text-2xl font-bold border-b-4 border-gray-800 pb-3 mb-8 inline-block">Expertise</h3> \){skillsHTML}` : ''}
+        </div>
+      </div>
+    `;
+  };
+
+  // Live update
+  document.getElementById('form').addEventListener('input', render);
+  document.addEventListener('click', e => { if (e.target.classList.contains('remove')) { e.target.parentElement.remove(); render(); } });
+
+  // Download PDF
+  document.getElementById('download').onclick = async () => {
+    const element = document.getElementById('preview').firstElementChild;
+    const canvas = await html2canvas(element, { scale: 2 });
+    const img = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const width = pdf.internal.pageSize.getWidth();
+    const height = (canvas.height * width) / canvas.width;
+    pdf.addImage(img, 'PNG', 0, 0, width, height);
+    pdf.save((getData().name || 'Resume') + '.pdf');
+  };
+
+  render(); // initial
+</script>
 </body>
 </html>
