@@ -1,78 +1,685 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern CV Builder - Working 100%</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        body { background:#f8f9fa; font-family:system-ui,sans-serif; }
-        .header { background:linear-gradient(135deg,#2c3e50,#3498db); color:white; padding:30px 0; }
-        .input-form,.cv-preview-container { padding:25px; background:white; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.12); height:calc(100vh-140px); overflow-y:auto; }
-        #cv-preview { max-width:8.5in; margin:auto; padding:20px; line-height:1.7; color:#2c3e50; }
-        #cv-preview h1 { font-size:2.8rem; font-weight:800; border-bottom:5px solid #3498db; padding-bottom:10px; }
-        #cv-preview h3 { background:#ebf3fd; padding:12px 18px; margin:30px 0 15px; border-left:6px solid #3498db; border-radius:0 10px 10px 0; font-size:1.4rem; }
-        .contact-info a { color:#3498db; }
-        .section-item { margin-bottom:22px; padding-bottom:18px; border-bottom:1px dashed #eee; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modern CV Builder</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#0d6efd; /* blue accent */
+      --accent-2:#ff6b6b; /* secondary accent */
+      --muted:#6c757d;
+      --card-bg: #fff;
+    }
+    body{
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #f6f8fb 0%, #ffffff 100%);
+      color:#212529;
+      padding: 2rem;
+    }
+
+    .builder {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    /* Left form area */
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 6px 18px rgba(18,38,63,0.08);
+    }
+
+    .panel h5 { font-weight: 700; margin-bottom: .75rem; }
+
+    .preview-wrap {
+      padding: 1.5rem;
+    }
+
+    /* CV preview */
+    .cv {
+      width: 842px; /* A4 width in px at 96dpi ~ 842px */
+      max-width: 100%;
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(16,24,40,0.08);
+      color: #111827;
+    }
+
+    .cv .left {
+      width: 30%;
+      float: left;
+      padding-right: 18px;
+      box-sizing: border-box;
+      border-right: 1px solid #eef2f7;
+      min-height: 100px;
+    }
+
+    .cv .right {
+      width: 70%;
+      float: right;
+      padding-left: 18px;
+      box-sizing: border-box;
+    }
+
+    .profile-img {
+      width: 100%;
+      max-width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 3px solid rgba(13,110,253,0.06);
+      background: #f3f4f6;
+    }
+
+    .name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .title {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0b1220;
+      margin-bottom: 8px;
+      margin-top: 12px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .skill-pill {
+      display:inline-block;
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:999px;
+      background: rgba(13,110,253,0.08);
+      margin: 3px 6px 3px 0;
+    }
+
+    .item {
+      margin-bottom: 10px;
+    }
+
+    /* small print */
+    .cv .contact-item { font-size: 13px; margin-bottom: 6px; }
+
+    /* responsive adjustments */
+    @media (max-width: 1000px) {
+      .builder { grid-template-columns: 1fr; padding: 1rem; }
+      .cv .left, .cv .right { width: 100%; float:none; padding: 0; border: none; }
+    }
+
+    /* helpers */
+    .btn-accent { background: var(--accent); color: #fff; border: none; }
+    .btn-accent:hover { opacity: .95; }
+    .small-muted { font-size: 12px; color: #889096; }
+    .template-badge { font-size: 11px; padding: 6px 8px; border-radius: 8px; }
+    .mb-sm { margin-bottom: .6rem; }
+    .hr-thin { height:1px;background:#eef2f7;border:none;margin:12px 0; }
+  </style>
 </head>
 <body>
-<header class="header"><div class="container text-center"><h1>Modern CV Builder</h1><p class="lead">Professional resume in minutes</p></div></header>
 
-<div class="container-fluid"><div class="row g-4">
-    <div class="col-lg-6"><div class="input-form">
-        <h2>Your Information</h2>
-        <form id="cv-form">
-            <input type="text" class="form-control mb-3" id="name" placeholder="Full Name">
-            <input type="text" class="form-control mb-3" id="title" placeholder="Job Title">
-            <textarea class="form-control mb-4" id="summary" rows="4" placeholder="Professional summary..."></textarea>
+  <div class="builder">
+    <!-- LEFT: Form controls -->
+    <div class="panel">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5>CV Builder</h5>
+        <div class="small-muted">Modern template</div>
+      </div>
 
-            <h5 class="text-primary">Contact</h5>
-            <div class="row g-3 mb-4">
-                <div class="col-6"><input type="text" class="form-control" id="phone" placeholder="Phone"></div>
-                <div class="col-6"><input type="email" class="form-control" id="email" placeholder="Email"></div>
-                <div class="col-6"><input type="url" class="form-control" id="linkedin" placeholder="LinkedIn"></div>
-                <div class="col-6"><input type="url" class="form-control" id="github" placeholder="GitHub"></div>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Full name</label>
+        <input id="input-name" class="form-control" placeholder="Jane Doe" value="Jane Doe">
+      </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="text-primary m-0">Experience</h5>
-                <button type="button" class="btn btn-outline-primary add-btn" data-target="experience-inputs">+ Add Job</button>
-            </div>
-            <div id="experience-inputs"></div>
+      <div class="mb-3">
+        <label class="form-label">Job title / headline</label>
+        <input id="input-title" class="form-control" placeholder="Product Designer" value="Product Designer">
+      </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="text-primary m-0">Education</h5>
-                <button type="button" class="btn btn-outline-primary add-btn" data-target="education-inputs">+ Add Degree</button>
-            </div>
-            <div id="education-inputs"></div>
+      <div class="mb-3">
+        <label class="form-label">Profile summary</label>
+        <textarea id="input-summary" class="form-control" rows="3">Creative product designer with 6+ years of experience designing delightful, human-centered experiences for web and mobile.</textarea>
+      </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="text-primary m-0">Certifications</h5>
-                <button type="button" class="btn btn-outline-primary add-btn" data-target="misc-inputs">+ Add Item</button>
-            </div>
-            <div id="misc-inputs"></div>
-        </form>
-        <button id="download-pdf-btn" class="btn btn-success btn-lg w-100 mt-4">Download PDF</button>
-    </div></div>
-
-    <div class="col-lg-6"><div class="cv-preview-container sticky-top">
-        <div id="cv-preview" class="bg-white">
-            <h1 id="preview-name">Name</h1>
-            <p class="lead text-primary fw-bold" id="preview-title">Title</p>
-            <div class="contact-info mb-5" id="contact-preview"></div>
-            <h3>Summary</h3><p id="preview-summary"></p>
-            <h3 id="exp-header" style="display:none;">Experience</h3><div id="preview-experience"></div>
-            <h3 id="edu-header" style="display:none;">Education</h3><div id="preview-education"></div>
-            <h3 id="misc-header" style="display:none;">Certifications</h3><div id="preview-misc"></div>
+      <div class="row g-2 mb-3">
+        <div class="col-6">
+          <label class="form-label">Email</label>
+          <input id="input-email" class="form-control" placeholder="you@example.com" value="jane@example.com">
         </div>
-    </div></div>
-</div></div>
+        <div class="col-6">
+          <label class="form-label">Phone</label>
+          <input id="input-phone" class="form-control" placeholder="+27 82 000 0000" value="+27 82 000 0000">
+        </div>
+      </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded',()=>{const u=()=>{document.getElementById('preview-name').textContent=document.getElementById('name').value||'Name';document.getElementById('preview-title').textContent=document.getElementById('title').value||'Title';document.getElementById('preview-summary').textContent=document.getElementById('summary').value||'Summary...';const p=document.getElementById('phone').value,e=document.getElementById('email').value,l=document.getElementById('linkedin').value,g=document.getElementById('github').value;let c='';if(p)c+=`Phone: \( {p}<br>`;if(e)c+=`Email: <a href="mailto: \){e}">\( {e}</a><br>`;if(l)c+=`LinkedIn: <a href=" \){l}">\( {l}</a><br>`;if(g)c+=`GitHub: <a href=" \){g}">\( {g}</a>`;document.getElementById('contact-preview').innerHTML=c;['experience','education','misc'].forEach(s=>{const items=document.querySelectorAll(`# \){s}-inputs .item`);let html='';items.forEach(i=>{const data=Array.from(i.querySelectorAll('input,textarea')).reduce((a,v)=>({...a,[v.dataset.field]:v.value}),{});if(s==='experience'&&data.job)html+=`<div class="section-item"><strong>\( {data.job}</strong> at <strong> \){data.company||'Company'}</strong> <span class="float-end text-muted">\( {data.dates||''}</span> \){data.desc?`<ul class="mt-2">\( {data.desc.split('\n').map(l=>`<li> \){l.replace(/^[-•]\\s*/,'')}</li>`).join('')}</ul>`:''}</div>`;else if(s==='education'&&data.degree)html+=`<div class="section-item"><strong>\( {data.degree}</strong><br><em> \){data.school||'University'}</em> — \( {data.dates||''}</div>`;else if(s==='misc'&&data.title)html+=`<div class="section-item"><strong> \){data.title}</strong><br><small class="text-muted">\( {data.details||''}</small></div>`});document.getElementById(`preview- \){s}`).innerHTML=html;document.getElementById(s.slice(0,3)+'-header').style.display=html?'block':'none'})};document.getElementById('cv-form').addEventListener('input',u);document.addEventListener('click',e=>{if(e.target.classList.contains('add-btn')){const t=e.target.dataset.target;const i=t.includes('experience')?`<div class="item card p-3 mb-3"><button type="button" class="btn-close float-end"></button><input class="form-control mb-2" data-field="job" placeholder="Job Title"><div class="row g-2 mb-2"><div class="col"><input class="form-control" data-field="company" placeholder="Company"></div><div class="col"><input class="form-control" data-field="dates" placeholder="Dates"></div></div><textarea class="form-control" data-field="desc" rows="3" placeholder="Bullets..."></textarea></div>`:t.includes('education')?`<div class="item card p-3 mb-3"><button type="button" class="btn-close float-end"></button><input class="form-control mb-2" data-field="degree" placeholder="Degree"><div class="row g-2"><div class="col-8"><input class="form-control" data-field="school" placeholder="University"></div><div class="col-4"><input class="form-control" data-field="dates" placeholder="Dates"></div></div></div>`:`<div class="item card p-3 mb-3"><button type="button" class="btn-close float-end"></button><input class="form-control mb-2" data-field="title" placeholder="Title"><textarea class="form-control" data-field="details" rows="2" placeholder="Details"></textarea></div>`;document.getElementById(t).insertAdjacentHTML('beforeend',i);u()}if(e.target.classList.contains('btn-close')&&e.target.parentElement.classList.contains('item')){e.target.parentElement.remove();u()}});document.getElementById('download-pdf-btn').onclick=()=>{u();const n=(document.getElementById('name').value||'Resume').replace(/[^a-zA-Z0-9]/g,'_');html2pdf().set({margin:[0.5,0.6,0.5,0.6],filename:`${n}.pdf`,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'in',format:'letter',orientation:'portrait'}}).from(document.getElementById('cv-preview')).save()};document.querySelector('.add-btn').click()});
-</script>
+      <div class="row g-2 mb-3">
+        <div class="col-8">
+          <label class="form-label">Location</label>
+          <input id="input-location" class="form-control" placeholder="Johannesburg, South Africa" value="Johannesburg, South Africa">
+        </div>
+        <div class="col-4">
+          <label class="form-label">Website</label>
+          <input id="input-website" class="form-control" placeholder="portfolio.site" value="janedoe.design">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Profile photo</label>
+        <input id="input-photo" type="file" accept="image/*" class="form-control">
+        <div class="small-muted mt-1">Optional. Square photo works best.</div>
+      </div>
+
+      <hr class="hr-thin">
+
+      <!-- Skills -->
+      <div class="mb-3">
+        <label class="form-label">Skills (comma separated)</label>
+        <input id="input-skills" class="form-control" placeholder="UI Design, Figma, HTML" value="UI Design, Figma, HTML, CSS, JavaScript">
+      </div>
+
+      <hr class="hr-thin">
+
+      <!-- Experience - dynamic block container -->
+      <div id="experience-container" class="mb-2">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <label class="form-label mb-0">Experience</label>
+          <button id="add-experience" class="btn btn-sm btn-outline-primary">+ Add</button>
+        </div>
+
+        <!-- template entry -->
+        <div class="experience-entry mb-2 p-2 border rounded" data-index="0">
+          <div class="row g-2">
+            <div class="col-6">
+              <input class="form-control exp-role" placeholder="Senior Product Designer" value="Senior Product Designer">
+            </div>
+            <div class="col-6">
+              <input class="form-control exp-company" placeholder="Company — Location" value="Acme Inc — Cape Town">
+            </div>
+            <div class="col-6 mt-2">
+              <input class="form-control exp-dates" placeholder="2019 — Present" value="2019 — Present">
+            </div>
+            <div class="col-6 mt-2">
+              <input class="form-control exp-location" placeholder="Remote / City" value="Remote">
+            </div>
+            <div class="col-12 mt-2">
+              <textarea class="form-control exp-desc" rows="2" placeholder="Describe responsibilities and achievements">Lead design for mobile & web products, collaborated closely with product & engineering to ship features that increased conversion by 18%.</textarea>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end mt-2">
+            <button class="btn btn-sm btn-danger remove-exp">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="hr-thin">
+
+      <!-- Education -->
+      <div id="education-container" class="mb-2">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <label class="form-label mb-0">Education</label>
+          <button id="add-education" class="btn btn-sm btn-outline-primary">+ Add</button>
+        </div>
+
+        <div class="education-entry mb-2 p-2 border rounded" data-index="0">
+          <div class="row g-2">
+            <div class="col-8">
+              <input class="form-control edu-school" placeholder="University / School" value="University of Johannesburg">
+            </div>
+            <div class="col-4">
+              <input class="form-control edu-dates" placeholder="2014 — 2017" value="2014 — 2017">
+            </div>
+            <div class="col-12 mt-2">
+              <input class="form-control edu-degree" placeholder="Degree or Certificate" value="B.Des — Industrial Design">
+            </div>
+          </div>
+          <div class="d-flex justify-content-end mt-2">
+            <button class="btn btn-sm btn-danger remove-edu">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="hr-thin">
+
+      <!-- Buttons -->
+      <div class="d-flex gap-2">
+        <button id="download-pdf" class="btn btn-accent w-100">Download PDF</button>
+        <button id="reset-btn" class="btn btn-outline-secondary w-100">Reset</button>
+      </div>
+
+      <div class="small-muted mt-2 text-center">Built with client-side JS — your data stays in the browser.</div>
+
+    </div>
+
+    <!-- RIGHT: Preview -->
+    <div class="preview-wrap">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          <h5 class="mb-0">Live Preview</h5>
+          <div class="small-muted">What your CV will look like</div>
+        </div>
+        <div>
+          <span class="template-badge bg-light border">Template: Modern</span>
+        </div>
+      </div>
+
+      <div id="cv-preview" class="cv" role="document">
+        <!-- Left column -->
+        <div class="left">
+          <div class="d-flex align-items-center mb-2">
+            <img id="preview-photo" class="profile-img me-2" src="" alt="Photo" style="display:none;">
+            <div>
+              <div id="preview-name" class="name">Jane Doe</div>
+              <div id="preview-title" class="title">Product Designer</div>
+            </div>
+          </div>
+
+          <div class="section-title">Contact</div>
+          <div id="preview-contact" class="mb-3">
+            <div class="contact-item"><strong>Email: </strong><span id="p-email" class="muted">jane@example.com</span></div>
+            <div class="contact-item"><strong>Phone: </strong><span id="p-phone" class="muted">+27 82 000 0000</span></div>
+            <div class="contact-item"><strong>Location: </strong><span id="p-location" class="muted">Johannesburg, South Africa</span></div>
+            <div class="contact-item"><strong>Website: </strong><span id="p-website" class="muted">janedoe.design</span></div>
+          </div>
+
+          <div class="section-title">Skills</div>
+          <div id="preview-skills" class="mb-2">
+            <!-- skill pills -->
+          </div>
+
+          <div class="section-title">Languages</div>
+          <div class="mb-1 muted small">English — Native</div>
+          <div class="muted small">Afrikaans — Intermediate</div>
+
+        </div>
+
+        <!-- Right column -->
+        <div class="right">
+          <div class="section-title">Profile</div>
+          <div id="preview-summary" class="muted item">Creative product designer with 6+ years of experience designing delightful, human-centered experiences for web and mobile.</div>
+
+          <div class="section-title">Experience</div>
+          <div id="preview-experience">
+            <!-- generated -->
+          </div>
+
+          <div class="section-title">Education</div>
+          <div id="preview-education">
+            <!-- generated -->
+          </div>
+
+        </div>
+        <div style="clear:both"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Libraries: html2pdf (uses html2canvas + jsPDF under the hood) -->
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // --- Helper: initial DOM references ---
+    const inputName = document.getElementById('input-name');
+    const inputTitle = document.getElementById('input-title');
+    const inputSummary = document.getElementById('input-summary');
+    const inputEmail = document.getElementById('input-email');
+    const inputPhone = document.getElementById('input-phone');
+    const inputLocation = document.getElementById('input-location');
+    const inputWebsite = document.getElementById('input-website');
+    const inputPhoto = document.getElementById('input-photo');
+    const inputSkills = document.getElementById('input-skills');
+
+    const previewName = document.getElementById('preview-name');
+    const previewTitle = document.getElementById('preview-title');
+    const previewSummary = document.getElementById('preview-summary');
+    const previewPhoto = document.getElementById('preview-photo');
+    const pEmail = document.getElementById('p-email');
+    const pPhone = document.getElementById('p-phone');
+    const pLocation = document.getElementById('p-location');
+    const pWebsite = document.getElementById('p-website');
+    const previewSkills = document.getElementById('preview-skills');
+    const previewExperience = document.getElementById('preview-experience');
+    const previewEducation = document.getElementById('preview-education');
+
+    const downloadBtn = document.getElementById('download-pdf');
+    const resetBtn = document.getElementById('reset-btn');
+
+    // Experience & Education containers in the form
+    const expContainer = document.getElementById('experience-container');
+    const eduContainer = document.getElementById('education-container');
+
+    // --- Functions to update the preview ---
+    function updateBasic() {
+      previewName.textContent = inputName.value || 'Full Name';
+      previewTitle.textContent = inputTitle.value || 'Job Title';
+      previewSummary.textContent = inputSummary.value || '';
+      pEmail.textContent = inputEmail.value || '';
+      pPhone.textContent = inputPhone.value || '';
+      pLocation.textContent = inputLocation.value || '';
+      pWebsite.textContent = inputWebsite.value || '';
+      updateSkills();
+    }
+
+    function updateSkills(){
+      // Split by comma, show as pills
+      const raw = inputSkills.value || '';
+      previewSkills.innerHTML = '';
+      const items = raw.split(',').map(s => s.trim()).filter(Boolean);
+      if(!items.length){
+        const fallback = document.createElement('div');
+        fallback.className = 'muted small';
+        fallback.textContent = '—';
+        previewSkills.appendChild(fallback);
+        return;
+      }
+      items.forEach(s=>{
+        const span = document.createElement('span');
+        span.className = 'skill-pill';
+        span.textContent = s;
+        previewSkills.appendChild(span);
+      });
+    }
+
+    // Create preview blocks for experience entries
+    function updateExperiencePreview(){
+      previewExperience.innerHTML = '';
+      const entries = expContainer.querySelectorAll('.experience-entry');
+      if(entries.length === 0){
+        const nodata = document.createElement('div');
+        nodata.className = 'muted small';
+        nodata.textContent = 'No experience added';
+        previewExperience.appendChild(nodata);
+        return;
+      }
+      entries.forEach(entry => {
+        const role = entry.querySelector('.exp-role')?.value || '';
+        const company = entry.querySelector('.exp-company')?.value || '';
+        const dates = entry.querySelector('.exp-dates')?.value || '';
+        const loc = entry.querySelector('.exp-location')?.value || '';
+        const desc = entry.querySelector('.exp-desc')?.value || '';
+
+        const item = document.createElement('div');
+        item.className = 'item';
+        const header = document.createElement('div');
+        header.style.display = 'flex';
+        header.style.justifyContent = 'space-between';
+        header.innerHTML = `<div style="font-weight:600">${escapeHtml(role)} — <span class="muted" style="font-weight:500">${escapeHtml(company)}</span></div><div class="muted" style="font-size:12px">${escapeHtml(dates)}</div>`;
+        item.appendChild(header);
+        if(desc) {
+          const p = document.createElement('div');
+          p.className = 'muted';
+          p.style.marginTop = '6px';
+          p.textContent = desc;
+          item.appendChild(p);
+        }
+        previewExperience.appendChild(item);
+      });
+    }
+
+    // Education preview
+    function updateEducationPreview(){
+      previewEducation.innerHTML = '';
+      const entries = eduContainer.querySelectorAll('.education-entry');
+      if(entries.length === 0){
+        const nodata = document.createElement('div');
+        nodata.className = 'muted small';
+        nodata.textContent = 'No education info';
+        previewEducation.appendChild(nodata);
+        return;
+      }
+      entries.forEach(entry => {
+        const school = entry.querySelector('.edu-school')?.value || '';
+        const dates = entry.querySelector('.edu-dates')?.value || '';
+        const degree = entry.querySelector('.edu-degree')?.value || '';
+
+        const item = document.createElement('div');
+        item.className = 'item';
+        item.innerHTML = `<div style="display:flex;justify-content:space-between"><div style="font-weight:600">${escapeHtml(school)}</div><div class="muted" style="font-size:12px">${escapeHtml(dates)}</div></div><div class="muted">${escapeHtml(degree)}</div>`;
+        previewEducation.appendChild(item);
+      });
+    }
+
+    // Escape HTML to avoid injection in preview
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});
+    }
+
+    // --- Photo upload preview ---
+    inputPhoto.addEventListener('change', (e)=>{
+      const file = e.target.files[0];
+      if(!file) {
+        previewPhoto.style.display = 'none';
+        previewPhoto.src = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(ev){
+        previewPhoto.src = ev.target.result;
+        previewPhoto.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // --- Add / remove dynamic experience entries ---
+    document.getElementById('add-experience').addEventListener('click', (e)=>{
+      e.preventDefault();
+      addExperienceEntry();
+    });
+
+    function addExperienceEntry(data = {}) {
+      const idx = expContainer.querySelectorAll('.experience-entry').length;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'experience-entry mb-2 p-2 border rounded';
+      wrapper.dataset.index = idx;
+
+      wrapper.innerHTML = `
+        <div class="row g-2">
+          <div class="col-6">
+            <input class="form-control exp-role" placeholder="Senior Product Designer" value="${data.role || ''}">
+          </div>
+          <div class="col-6">
+            <input class="form-control exp-company" placeholder="Company — Location" value="${data.company || ''}">
+          </div>
+          <div class="col-6 mt-2">
+            <input class="form-control exp-dates" placeholder="2019 — Present" value="${data.dates || ''}">
+          </div>
+          <div class="col-6 mt-2">
+            <input class="form-control exp-location" placeholder="Remote / City" value="${data.location || ''}">
+          </div>
+          <div class="col-12 mt-2">
+            <textarea class="form-control exp-desc" rows="2" placeholder="Describe responsibilities and achievements">${data.desc || ''}</textarea>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end mt-2">
+          <button class="btn btn-sm btn-danger remove-exp">Remove</button>
+        </div>
+      `;
+      expContainer.appendChild(wrapper);
+      bindDynamicExpEvents(wrapper);
+      updateExperiencePreview();
+    }
+
+    function bindDynamicExpEvents(node) {
+      const remove = node.querySelector('.remove-exp');
+      remove?.addEventListener('click', (ev)=>{
+        ev.preventDefault();
+        node.remove();
+        updateExperiencePreview();
+      });
+      // bind input listeners to update preview live
+      node.querySelectorAll('input,textarea').forEach(inp=>{
+        inp.addEventListener('input', ()=>{ updateExperiencePreview(); });
+      });
+    }
+
+    // Education entries
+    document.getElementById('add-education').addEventListener('click', (e)=>{
+      e.preventDefault();
+      addEducationEntry();
+    });
+
+    function addEducationEntry(data = {}) {
+      const idx = eduContainer.querySelectorAll('.education-entry').length;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'education-entry mb-2 p-2 border rounded';
+      wrapper.dataset.index = idx;
+
+      wrapper.innerHTML = `
+        <div class="row g-2">
+          <div class="col-8">
+            <input class="form-control edu-school" placeholder="University / School" value="${data.school || ''}">
+          </div>
+          <div class="col-4">
+            <input class="form-control edu-dates" placeholder="2014 — 2017" value="${data.dates || ''}">
+          </div>
+          <div class="col-12 mt-2">
+            <input class="form-control edu-degree" placeholder="Degree or Certificate" value="${data.degree || ''}">
+          </div>
+        </div>
+        <div class="d-flex justify-content-end mt-2">
+          <button class="btn btn-sm btn-danger remove-edu">Remove</button>
+        </div>
+      `;
+      eduContainer.appendChild(wrapper);
+      bindDynamicEduEvents(wrapper);
+      updateEducationPreview();
+    }
+
+    function bindDynamicEduEvents(node) {
+      const remove = node.querySelector('.remove-edu');
+      remove?.addEventListener('click', (ev)=>{
+        ev.preventDefault();
+        node.remove();
+        updateEducationPreview();
+      });
+      node.querySelectorAll('input').forEach(inp=>{
+        inp.addEventListener('input', ()=>{ updateEducationPreview(); });
+      });
+    }
+
+    // Bind initial remove events for the template entries
+    document.querySelectorAll('.remove-exp').forEach(btn=>{
+      btn.addEventListener('click', (ev)=>{
+        ev.preventDefault();
+        const entry = btn.closest('.experience-entry');
+        if(entry) { entry.remove(); updateExperiencePreview(); }
+      });
+    });
+    document.querySelectorAll('.remove-edu').forEach(btn=>{
+      btn.addEventListener('click', (ev)=>{
+        ev.preventDefault();
+        const entry = btn.closest('.education-entry');
+        if(entry) { entry.remove(); updateEducationPreview(); }
+      });
+    });
+
+    // On-change listeners for basic fields
+    [inputName, inputTitle, inputSummary, inputEmail, inputPhone, inputLocation, inputWebsite].forEach(el=>{
+      el.addEventListener('input', updateBasic);
+    });
+    inputSkills.addEventListener('input', updateSkills);
+
+    // When dynamic form fields change, update preview
+    // Initial binding for the template fields already present
+    document.querySelectorAll('.experience-entry input, .experience-entry textarea').forEach(inp=>{
+      inp.addEventListener('input', updateExperiencePreview);
+    });
+    document.querySelectorAll('.education-entry input').forEach(inp=>{
+      inp.addEventListener('input', updateEducationPreview);
+    });
+
+    // Default initial update
+    updateBasic();
+    updateExperiencePreview();
+    updateEducationPreview();
+
+    // Download as PDF
+    downloadBtn.addEventListener('click', async ()=>{
+      // Temporarily scale to A4-like
+      const element = document.getElementById('cv-preview');
+
+      // Options for html2pdf
+      const opt = {
+        margin:       [0.4, 0.25, 0.4, 0.25], // top, left, bottom, right in inches
+        filename:     (inputName.value ? inputName.value.replace(/\s+/g,'_') : 'cv') + '_CV.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false, allowTaint: true },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+
+      // temporarily make preview a fixed width suited for A4 export
+      // show visual feedback
+      downloadBtn.textContent = 'Generating PDF...';
+      downloadBtn.disabled = true;
+
+      try {
+        await html2pdf().set(opt).from(element).save();
+      } catch (err) {
+        console.error(err);
+        alert('Error generating PDF: ' + (err.message || err));
+      } finally {
+        downloadBtn.textContent = 'Download PDF';
+        downloadBtn.disabled = false;
+      }
+    });
+
+    // Reset button
+    resetBtn.addEventListener('click', ()=>{
+      if(!confirm('Reset the form to defaults?')) return;
+      // reset text fields (simple approach: reload page)
+      window.location.reload();
+    });
+
+    // Allow pressing Enter in certain inputs to not submit form etc.
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+      }
+    });
+
+    // Accessibility: give focus management for add buttons
+    document.getElementById('add-experience').addEventListener('click', ()=>{ document.querySelector('.experience-entry:last-child .exp-role')?.focus(); });
+    document.getElementById('add-education').addEventListener('click', ()=>{ document.querySelector('.education-entry:last-child .edu-school')?.focus(); });
+
+    // Extra: live-bind when new nodes are added (delegation for remove buttons)
+    expContainer.addEventListener('click', (e)=>{
+      if(e.target.matches('.remove-exp')) {
+        const entry = e.target.closest('.experience-entry');
+        entry?.remove();
+        updateExperiencePreview();
+      }
+    });
+    eduContainer.addEventListener('click', (e)=>{
+      if(e.target.matches('.remove-edu')) {
+        const entry = e.target.closest('.education-entry');
+        entry?.remove();
+        updateEducationPreview();
+      }
+    });
+
+    // When user types in the preview if any dynamic text changes (already handled by input listeners)
+  </script>
 </body>
 </html>
