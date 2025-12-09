@@ -1,269 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dark Elegant Resume Builder - Instant PDF</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CV Builder</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; }
-    .resume { width: 210mm; min-height: 297mm; background: white; box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
-    .sidebar { background: #0f172a; color: white; }
-    .progress-bg { height: 7px; background: #334155; border-radius: 4px; }
-    .progress { height: 100%; background: white; border-radius: 4px; }
-    .section-title { position: relative; display: inline-block; }
-    .section-title::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 60px; height: 5px; background: #1e293b; }
+    body { background-color: #f8f9fa; }
+    .resume-preview {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    /* Template Styles */
+    .template-modern h2 { color: #007bff; border-bottom: 2px solid #007bff; }
+    .template-minimalist h2 { color: #333; border-bottom: 1px solid #ccc; font-family: 'Arial'; }
+    .template-creative h2 { color: #e83e8c; border-bottom: 3px dashed #e83e8c; font-family: 'Cursive'; }
+    .section-title { font-weight: bold; margin-top: 15px; }
   </style>
 </head>
-<body class="py-10">
-
-<div class="max-w-7xl mx-auto px-6">
-  <h1 class="text-4xl font-black text-center mb-10 text-gray-800">
-    Dark Elegant Resume Builder <span class="text-indigo-600">→ Free PDF</span>
-  </h1>
-
-  <div class="grid grid-cols-1 xl:grid-cols-2 gap-10">
+<body>
+<div class="container py-5">
+  <h1 class="text-center mb-4">CV / Resume Builder</h1>
+  
+  <div class="row">
     <!-- Form -->
-    <div class="bg-white rounded-2xl shadow-2xl p-8 max-h-screen overflow-y-auto">
-      <form id="form" class="space-y-8">
-
-        <!-- Personal Info -->
-        <div>
-          <h3 class="text-xl font-bold text-indigo-600 mb-4">Personal Information</h3>
-          <input type="text" data-key="name" placeholder="Full Name" class="w-full border rounded-lg px-4 py-3 mb-3"/>
-          <input type="text" data-key="title" placeholder="Job Title" class="w-full border rounded-lg px-4 py-3 mb-3"/>
-          <textarea data-key="profile" rows="4" placeholder="Professional summary..." class="w-full border rounded-lg px-4 py-3"></textarea>
+    <div class="col-md-6">
+      <form id="cvForm">
+        <div class="mb-3">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="name">
         </div>
-
-        <!-- Contact -->
-        <div>
-          <h3 class="text-xl font-bold text-indigo-600 mb-4">Contact & Social</h3>
-          <input type="email" data-key="email" placeholder="Email" class="w-full border rounded-lg px-4 py-3 mb-3"/>
-          <input type="tel" data-key="phone" placeholder="Phone" class="w-full border rounded-lg px-4 py-3 mb-3"/>
-          <input type="text" data-key="address" placeholder="City, Country" class="w-full border rounded-lg px-4 py-3 mb-3"/>
-          <input type="url" data-key="linkedin" placeholder="LinkedIn URL" class="w-full border rounded-lg px-4 py-3 mb-3"/>
-          <input type="url" data-key="twitter" placeholder="Twitter/X URL" class="w-full border rounded-lg px-4 py-3 mb-3"/>
-          <input type="url" data-key="instagram" placeholder="Instagram URL" class="w-full border rounded-lg px-4 py-3"/>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" id="email">
         </div>
-
-        <div>
-          <label class="block font-semibold mb-2">Profile Photo (square recommended)</label>
-          <input type="file" id="photoInput" accept="image/*" class="w-full"/>
+        <div class="mb-3">
+          <label class="form-label">Phone</label>
+          <input type="text" class="form-control" id="phone">
         </div>
-
-        <!-- Experience -->
-        <div>
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold text-indigo-600">Experience</h3>
-            <button type="button" id="addExp" class="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm hover:bg-indigo-700">+ Add Experience</button>
-          </div>
-          <div id="expContainer"></div>
+        <div class="mb-3">
+          <label class="form-label">Education</label>
+          <textarea class="form-control" id="education"></textarea>
         </div>
-
-        <!-- Education -->
-        <div>
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold text-indigo-600">Education</h3>
-            <button type="button" id="addEdu" class="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm hover:bg-indigo-700">+ Add Education</button>
-          </div>
-          <div id="eduContainer"></div>
+        <div class="mb-3">
+          <label class="form-label">Experience</label>
+          <textarea class="form-control" id="experience"></textarea>
         </div>
-
-        <!-- Skills & Languages -->
-        <div class="grid grid-cols-2 gap-6">
-          <div>
-            <h3 class="text-xl font-bold text-indigo-600 mb-600 mb-3">Skills (Name Level%)</h3>
-            <textarea data-key="skills" rows="6" placeholder="Photoshop 95\nIllustrator 90\nFigma 85\nAfter Effects 80" class="w-full border rounded-lg px-4 py-3 text-sm"></textarea>
-          </div>
-          <div>
-            <h3 class="text-xl font-bold text-indigo-600 mb-3">Languages (Name Level%)</h3>
-            <textarea data-key="languages" rows="6" placeholder="English 100\nSpanish 70\nFrench 40" class="w-full border rounded-lg px-4 py-3 text-sm"></textarea>
-          </div>
+        <div class="mb-3">
+          <label class="form-label">Skills</label>
+          <textarea class="form-control" id="skills"></textarea>
         </div>
-
+        <div class="mb-3">
+          <label class="form-label">Choose Template</label>
+          <select class="form-select" id="templateSelect">
+            <option value="template-modern">Modern</option>
+            <option value="template-minimalist">Minimalist</option>
+            <option value="template-creative">Creative</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="generateResume()">Preview Resume</button>
+        <button type="button" class="btn btn-success" onclick="downloadPDF()">Download PDF</button>
       </form>
     </div>
-
-    <!-- Preview + Download -->
-    <div class="space-y-6">
-      <button id="downloadBtn" class="w-full bg-gradient-to-r from-indigo-700 to-purple-800 text-white font-bold text-xl py-6 rounded-xl shadow-2xl hover:shadow-purple-500/25 transition">
-        Download as PDF
-      </button>
-
-      <div id="resumePreview" class="resume mx-auto"></div>
+    
+    <!-- Resume Preview -->
+    <div class="col-md-6">
+      <div id="resumePreview" class="resume-preview template-modern">
+        <h2 id="previewName">Your Name</h2>
+        <p id="previewEmail">Email: example@email.com</p>
+        <p id="previewPhone">Phone: 123-456-7890</p>
+        
+        <div>
+          <p class="section-title">Education</p>
+          <p id="previewEducation">Your education details...</p>
+        </div>
+        
+        <div>
+          <p class="section-title">Experience</p>
+          <p id="previewExperience">Your work experience...</p>
+        </div>
+        
+        <div>
+          <p class="section-title">Skills</p>
+          <p id="previewSkills">Your skills...</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
-  const { jsPDF } = window.jspdf;
-  let photoURL = '';
+  function generateResume() {
+    // Update text
+    document.getElementById("previewName").innerText = document.getElementById("name").value || "Your Name";
+    document.getElementById("previewEmail").innerText = "Email: " + (document.getElementById("email").value || "example@email.com");
+    document.getElementById("previewPhone").innerText = "Phone: " + (document.getElementById("phone").value || "123-456-7890");
+    document.getElementById("previewEducation").innerText = document.getElementById("education").value || "Your education details...";
+    document.getElementById("previewExperience").innerText = document.getElementById("experience").value || "Your work experience...";
+    document.getElementById("previewSkills").innerText = document.getElementById("skills").value || "Your skills...";
+    
+    // Apply selected template
+    const preview = document.getElementById("resumePreview");
+    preview.className = "resume-preview " + document.getElementById("templateSelect").value;
+  }
 
-  // Photo handler
-  document.getElementById('photoInput').onchange = (e) => {
-    if (e.target.files[0]) {
-      photoURL = URL.createObjectURL(e.target.files[0]);
-      renderResume();
-    }
-  };
-
-  // Add Experience
-  document.getElementById('addExp').onclick = () => {
-    const container = document.getElementById('expContainer');
-    const div = document.createElement('div');
-    div.className = "border border-gray-300 rounded-lg p-5 mb-4 bg-gray-50 relative";
-    div.innerHTML = `
-      <input placeholder="Job Title" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
-      <input placeholder="Company" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
-      <input placeholder="Years (e.g. 2020 – 2023)" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
-      <textarea placeholder="Description (one bullet per line)" rows="3" class="w-full px-4 py-2 border rounded-lg"></textarea>
-      <button type="button" class="absolute top-3 right-3 text-red-600 hover:text-red-800 text-sm font-medium removeEntry">Remove</button>`;
-    container.appendChild(div);
-  };
-
-  // Add Education
-  document.getElementById('addEdu').onclick = () => {
-    const container = document.getElementById('eduContainer');
-    const div = document.createElement('div');
-    div.className = "border border-gray-300 rounded-lg p-5 mb-4 bg-gray-50 relative";
-    div.innerHTML = `
-      <input placeholder="Degree" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
-      <input placeholder="University / School" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
-      <input placeholder="Years (e.g. 2016 – 2020)" class="w-full mb-3 px-4 py-2 border rounded-lg"/>
-      <button type="button" class="absolute top-3 right-3 text-red-600 hover:text-red-800 text-sm font-medium removeEntry">Remove</button>`;
-    container.appendChild(div);
-  };
-
-  // Remove any entry
-  document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('removeEntry')) {
-      e.target.parentElement.remove();
-      renderResume();
-    }
-  });
-
-  // Get all form data
-  const getFormData = () => {
-    const data = {};
-    document.querySelectorAll('[data-key]').forEach(el => {
-      data[el.dataset.key] = el.value;
+  function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.html(document.getElementById("resumePreview"), {
+      callback: function (doc) {
+        doc.save("resume.pdf");
+      },
+      x: 10,
+      y: 10
     });
-    return data;
-  };
-
-  // Render resume in real-time
-  const renderResume = () => {
-    const d = getFormData();
-
-    // Experience entries
-    const experiences = Array.from(document.querySelectorAll('#expContainer > div')).map(block => {
-      const inputs = block.querySelectorAll('input, textarea');
-      return { title: inputs[0].value, company: inputs[1].value, years: inputs[2].value, desc: inputs[3].value };
-    });
-
-    // Education entries
-    const educations = Array.from(document.querySelectorAll('#eduContainer > div')).map(block => {
-      const inputs = block.querySelectorAll('input');
-      return { degree: inputs[0].value, school: inputs[1].value, years: inputs[2].value };
-    });
-
-    // Skills
-    const skills = d.skills ? d.skills.split('\n').map(l => l.trim()).filter(Boolean) : [];
-    const skillsHTML = skills.map(line => {
-      const [name = 'Skill', level = '80'] = line.split(' ');
-      return `<div class="flex items-center gap-4 mb-4">
-        <span class="w-32 text-sm font-medium">${name}</span>
-        <div class="flex-1 progress-bg"><div class="progress" style="width:${level}%"></div></div>
-      </div>`;
-    }).join('');
-
-    // Languages
-    const languages = d.languages ? d.languages.split('\n').map(l => l.trim()).filter(Boolean) : [];
-    const langHTML = languages.map(line => {
-      const [name = 'Language', level = '70'] = line.split(' ');
-      return `<div class="flex items-center gap-4 mb-4">
-        <span class="w-28 text-sm">${name}</span>
-        <div class="flex-1 progress-bg"><div class="progress" style="width:${level}%"></div></div>
-      </div>`;
-    }).join('');
-
-    document.getElementById('resumePreview').innerHTML = `
-      <div class="resume grid grid-cols-3 text-sm leading-relaxed">
-        <!-- Sidebar -->
-        <div class="sidebar p-12 flex flex-col">
-          \( {photoURL ? `<img src=" \){photoURL}" class="w-full object-cover rounded-b-3xl mb-10" style="height:420px"/>` : '<div class="bg-gray-700 h-96 mb-10 rounded-b-3xl"></div>'}
-
-          <h1 class="text-5xl font-black leading-none">${d.name || 'Your Name'}</h1>
-          <p class="text-xl opacity-90 mb-10">${d.title || 'Profession'}</p>
-
-          ${(d.linkedin || d.twitter || d.instagram) ? `
-          <div class="flex gap-6 text-3xl mb-12">
-            ${d.linkedin ? '<i class="fab fa-linkedin"></i>' : ''}
-            ${d.twitter ? '<i class="fab fa-twitter"></i>' : ''}
-            ${d.instagram ? '<i class="fab fa-instagram"></i>' : ''}
-          </div>` : ''}
-
-          <h3 class="text-xl font-bold border-b-2 border-gray-600 pb-4 mb-6">Contact</h3>
-          \( {d.email ? `<p class="mb-3"><i class="fas fa-envelope mr-3"></i> \){d.email}</p>` : ''}
-          \( {d.phone ? `<p class="mb-3"><i class="fas fa-phone mr-3"></i> \){d.phone}</p>` : ''}
-          \( {d.address ? `<p class="mb-10"><i class="fas fa-map-marker-alt mr-3"></i> \){d.address}</p>` : ''}
-
-          \( {langHTML ? `<h3 class="text-xl font-bold border-b-2 border-gray-600 pb-4 mb-6">Languages</h3> \){langHTML}` : ''}
-        </div>
-
-        <!-- Main Content -->
-        <div class="col-span-2 bg-gray-50 p-12">
-          <h3 class="text-2xl font-bold section-title mb-8">Profile</h3>
-          <p class="text-gray-700 mb-12">${(d.profile || '').replace(/\n/g, '<br>') || 'Your professional summary goes here...'}</p>
-
-          ${experiences.length ? `<h3 class="text-2xl font-bold section-title mb-8">Experience</h3>` : ''}
-          ${experiences.map(exp => `
-            <div class="mb-8">
-              <h4 class="font-bold text-lg">${exp.title || 'Job Title'}</h4>
-              <p class="text-gray-600">\( {exp.company || 'Company'} <span class="mx-2">•</span> \){exp.years || 'Dates'}</p>
-              <div class="mt-2 text-gray-700 text-sm leading-relaxed">${exp.desc ? exp.desc.replace(/\n/g, '<br>') : ''}</div>
-            </div>
-          `).join('')}
-
-          ${educations.length ? `<h3 class="text-2xl font-bold section-title mb-8">Education</h3>` : ''}
-          ${educations.map(edu => `
-            <div class="mb-7">
-              <h4 class="font-bold">${edu.degree || 'Degree'}</h4>
-              <p class="text-gray-600">\( {edu.school || 'University'} | \){edu.years || 'Years'}</p>
-            </div>
-          `).join('')}
-
-          \( {skillsHTML ? `<h3 class="text-2xl font-bold section-title mb-8">Expertise</h3> \){skillsHTML}` : ''}
-        </div>
-      </div>
-    `;
-
-    // Trigger re-render on any input
-    document.querySelectorAll('input, textarea').forEach(el => {
-      el.removeEventListener('input', renderResume);
-      el.addEventListener('input', renderResume);
-    });
-  };
-
-  // Download PDF
-  document.getElementById('downloadBtn').onclick = async () => {
-    const element = document.getElementById('resumePreview').firstElementChild;
-    const canvas = await html2canvas(element, { scale: 2, useCORS: true });
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save((getFormData().name || 'Resume') + '.pdf');
-  };
-
-  // Initial render + live update
-  renderResume();
-  document.getElementById('form').addEventListener('input', renderResume);
+  }
 </script>
 </body>
 </html>
