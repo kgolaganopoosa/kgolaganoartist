@@ -1,129 +1,397 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CV Builder</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body { background-color: #f8f9fa; }
-    .resume-preview {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      margin-top: 20px;
-    }
-    /* Template Styles */
-    .template-modern h2 { color: #007bff; border-bottom: 2px solid #007bff; }
-    .template-minimalist h2 { color: #333; border-bottom: 1px solid #ccc; font-family: 'Arial'; }
-    .template-creative h2 { color: #e83e8c; border-bottom: 3px dashed #e83e8c; font-family: 'Cursive'; }
-    .section-title { font-weight: bold; margin-top: 15px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern CV/Resume Builder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* Custom Styles for Resume Builder */
+        body {
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+        .input-form, .cv-preview-container {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            height: calc(100vh - 120px); /* Adjust height for scrolling */
+            overflow-y: auto;
+        }
+        .cv-preview-container {
+            border: 1px solid #ccc;
+            padding: 30px;
+        }
+        /* Styling for the CV/Resume itself */
+        #cv-preview {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 8.5in; /* Standard paper width */
+            margin: 0 auto;
+        }
+        #cv-preview h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        #cv-preview h3 {
+            background-color: #ecf0f1;
+            padding: 5px 10px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border-left: 5px solid #3498db;
+            color: #2c3e50;
+            font-size: 1.25rem;
+        }
+        #cv-preview .section-item {
+            margin-bottom: 15px;
+        }
+        .contact-info {
+            font-size: 0.9rem;
+        }
+        .contact-info span {
+            margin-right: 15px;
+        }
+        .btn-add-section {
+            margin-top: 10px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
-<div class="container py-5">
-  <h1 class="text-center mb-4">CV / Resume Builder</h1>
-  
-  <div class="row">
-    <!-- Form -->
-    <div class="col-md-6">
-      <form id="cvForm">
-        <div class="mb-3">
-          <label class="form-label">Full Name</label>
-          <input type="text" class="form-control" id="name">
+
+    <header class="header">
+        <div class="container text-center">
+            <h1>📄 Modern CV Builder</h1>
+            <p class="lead">Build, Preview, and Download your professional resume.</p>
         </div>
-        <div class="mb-3">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-control" id="email">
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-form">
+                    <h2 class="mb-4">Input Data</h2>
+
+                    <form id="cv-form">
+                        <h3 class="mt-4">Personal Details</h3>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="John Doe">
+                        </div>
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Professional Title</label>
+                            <input type="text" class="form-control" id="title" placeholder="Software Engineer">
+                        </div>
+                        <div class="mb-3">
+                            <label for="summary" class="form-label">Professional Summary</label>
+                            <textarea class="form-control" id="summary" rows="3" placeholder="A brief, impactful summary..."></textarea>
+                        </div>
+
+                        <h3 class="mt-4">Contact & Social Media</h3>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone" placeholder="(123) 456-7890">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="john.doe@example.com">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="linkedin" class="form-label">LinkedIn URL</label>
+                                <input type="url" class="form-control" id="linkedin" placeholder="https://linkedin.com/in/johndoe">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="github" class="form-label">GitHub/Portfolio URL</label>
+                                <input type="url" class="form-control" id="github" placeholder="https://github.com/johndoe">
+                            </div>
+                        </div>
+
+                        <div class="section-header mt-4">
+                            <h3>Experience</h3>
+                            <button type="button" class="btn btn-sm btn-primary btn-add-section" data-section="experience">Add Experience</button>
+                        </div>
+                        <div id="experience-inputs">
+                            </div>
+
+                        <div class="section-header mt-4">
+                            <h3>Education</h3>
+                            <button type="button" class="btn btn-sm btn-primary btn-add-section" data-section="education">Add Education</button>
+                        </div>
+                        <div id="education-inputs">
+                            </div>
+
+                        <div class="section-header mt-4">
+                            <h3>Activities & Certificates</h3>
+                            <button type="button" class="btn btn-sm btn-primary btn-add-section" data-section="misc">Add Item</button>
+                        </div>
+                        <div id="misc-inputs">
+                            </div>
+                    </form>
+
+                    <hr>
+                    <button id="download-pdf-btn" class="btn btn-success btn-lg w-100 mt-3">⬇️ Download CV as PDF</button>
+
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="cv-preview-container sticky-top">
+                    <div id="cv-preview">
+                        <h1 id="preview-name">Full Name</h1>
+                        <p class="lead" id="preview-title">Professional Title</p>
+
+                        <div class="contact-info mb-3">
+                            <span id="preview-phone"></span>
+                            <span id="preview-email"></span>
+                            <span id="preview-linkedin"></span>
+                            <span id="preview-github"></span>
+                        </div>
+
+                        <h3 class="mb-3">Professional Summary</h3>
+                        <p id="preview-summary">A brief, impactful summary about your career goals and achievements.</p>
+
+                        <h3 id="exp-header" style="display:none;">Experience</h3>
+                        <div id="preview-experience"></div>
+
+                        <h3 id="edu-header" style="display:none;">Education</h3>
+                        <div id="preview-education"></div>
+
+                        <h3 id="misc-header" style="display:none;">Activities & Certificates</h3>
+                        <div id="preview-misc"></div>
+
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-          <label class="form-label">Phone</label>
-          <input type="text" class="form-control" id="phone">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Education</label>
-          <textarea class="form-control" id="education"></textarea>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Experience</label>
-          <textarea class="form-control" id="experience"></textarea>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Skills</label>
-          <textarea class="form-control" id="skills"></textarea>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Choose Template</label>
-          <select class="form-select" id="templateSelect">
-            <option value="template-modern">Modern</option>
-            <option value="template-minimalist">Minimalist</option>
-            <option value="template-creative">Creative</option>
-          </select>
-        </div>
-        <button type="button" class="btn btn-primary" onclick="generateResume()">Preview Resume</button>
-        <button type="button" class="btn btn-success" onclick="downloadPDF()">Download PDF</button>
-      </form>
     </div>
-    
-    <!-- Resume Preview -->
-    <div class="col-md-6">
-      <div id="resumePreview" class="resume-preview template-modern">
-        <h2 id="previewName">Your Name</h2>
-        <p id="previewEmail">Email: example@email.com</p>
-        <p id="previewPhone">Phone: 123-456-7890</p>
-        
-        <div>
-          <p class="section-title">Education</p>
-          <p id="previewEducation">Your education details...</p>
-        </div>
-        
-        <div>
-          <p class="section-title">Experience</p>
-          <p id="previewExperience">Your work experience...</p>
-        </div>
-        
-        <div>
-          <p class="section-title">Skills</p>
-          <p id="previewSkills">Your skills...</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-  function generateResume() {
-    // Update text
-    document.getElementById("previewName").innerText = document.getElementById("name").value || "Your Name";
-    document.getElementById("previewEmail").innerText = "Email: " + (document.getElementById("email").value || "example@email.com");
-    document.getElementById("previewPhone").innerText = "Phone: " + (document.getElementById("phone").value || "123-456-7890");
-    document.getElementById("previewEducation").innerText = document.getElementById("education").value || "Your education details...";
-    document.getElementById("previewExperience").innerText = document.getElementById("experience").value || "Your work experience...";
-    document.getElementById("previewSkills").innerText = document.getElementById("skills").value || "Your skills...";
-    
-    // Apply selected template
-    const preview = document.getElementById("resumePreview");
-    preview.className = "resume-preview " + document.getElementById("templateSelect").value;
-  }
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('cv-form');
+            const preview = document.getElementById('cv-preview');
+            const downloadBtn = document.getElementById('download-pdf-btn');
 
-  function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.html(document.getElementById("resumePreview"), {
-      callback: function (doc) {
-        doc.save("resume.pdf");
-      },
-      x: 10,
-      y: 10
-    });
-  }
-</script>
+            // --- 1. Dynamic Section Template Functions ---
+
+            // Template for Experience/Job
+            const getExperienceTemplate = (index) => `
+                <div class="card p-3 mb-3 section-item" data-index="${index}" data-section="experience">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn-close remove-btn" aria-label="Close"></button>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" class="form-control form-control-sm" data-field="job-title" placeholder="Job Title">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control form-control-sm" data-field="company" placeholder="Company Name">
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control form-control-sm" data-field="dates" placeholder="Start Date - End Date">
+                        </div>
+                    </div>
+                    <textarea class="form-control form-control-sm" data-field="description" rows="3" placeholder="Key responsibilities and achievements (use bullet points or hyphens)."></textarea>
+                </div>
+            `;
+
+            // Template for Education
+            const getEducationTemplate = (index) => `
+                <div class="card p-3 mb-3 section-item" data-index="${index}" data-section="education">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn-close remove-btn" aria-label="Close"></button>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" class="form-control form-control-sm" data-field="degree" placeholder="Degree/Qualification">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control form-control-sm" data-field="institution" placeholder="Institution Name">
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control form-control-sm" data-field="dates" placeholder="Graduation Year/Dates">
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Template for Misc (Activities/Certificates)
+            const getMiscTemplate = (index) => `
+                <div class="card p-3 mb-3 section-item" data-index="${index}" data-section="misc">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn-close remove-btn" aria-label="Close"></button>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" class="form-control form-control-sm" data-field="title" placeholder="Activity/Certificate Title">
+                    </div>
+                    <textarea class="form-control form-control-sm" data-field="details" rows="2" placeholder="Description/Issuing Body/Date"></textarea>
+                </div>
+            `;
+
+
+            // --- 2. Core Logic for Input Management and Preview Update ---
+
+            const addSection = (sectionType) => {
+                const container = document.getElementById(`${sectionType}-inputs`);
+                const index = container.children.length; // Use current number of children as index
+                let template = '';
+
+                switch (sectionType) {
+                    case 'experience':
+                        template = getExperienceTemplate(index);
+                        break;
+                    case 'education':
+                        template = getEducationTemplate(index);
+                        break;
+                    case 'misc':
+                        template = getMiscTemplate(index);
+                        break;
+                    default:
+                        return;
+                }
+                container.insertAdjacentHTML('beforeend', template);
+                updatePreview(); // Update preview after adding a section
+            };
+
+            const removeSection = (button) => {
+                const sectionItem = button.closest('.section-item');
+                sectionItem.remove();
+                updatePreview(); // Update preview after removing a section
+            };
+
+            const updatePreview = () => {
+                // Personal & Contact Details
+                document.getElementById('preview-name').textContent = document.getElementById('name').value || 'Full Name';
+                document.getElementById('preview-title').textContent = document.getElementById('title').value || 'Professional Title';
+                document.getElementById('preview-summary').textContent = document.getElementById('summary').value || 'A brief, impactful summary about your career goals and achievements.';
+
+                // Contact Info (using helper function for icon/link)
+                const phone = document.getElementById('phone').value;
+                document.getElementById('preview-phone').innerHTML = phone ? `📞 ${phone}` : '';
+
+                const email = document.getElementById('email').value;
+                document.getElementById('preview-email').innerHTML = email ? `📧 <a href="mailto:${email}">${email}</a>` : '';
+
+                const linkedin = document.getElementById('linkedin').value;
+                document.getElementById('preview-linkedin').innerHTML = linkedin ? `🔗 <a href="${linkedin}" target="_blank">LinkedIn</a>` : '';
+
+                const github = document.getElementById('github').value;
+                document.getElementById('preview-github').innerHTML = github ? `💻 <a href="${github}" target="_blank">GitHub</a>` : '';
+
+
+                // Dynamic Sections (Experience, Education, Misc)
+                ['experience', 'education', 'misc'].forEach(sectionType => {
+                    const previewContainer = document.getElementById(`preview-${sectionType}`);
+                    const inputContainer = document.getElementById(`${sectionType}-inputs`);
+                    const header = document.getElementById(`${sectionType.substring(0, 3)}-header`);
+                    let html = '';
+
+                    const items = inputContainer.querySelectorAll('.section-item');
+                    items.forEach(item => {
+                        const data = {};
+                        item.querySelectorAll('[data-field]').forEach(input => {
+                            data[input.dataset.field] = input.value;
+                        });
+
+                        // Create HTML for the preview item
+                        if (sectionType === 'experience' && data['job-title'] && data['company']) {
+                            const descHtml = data.description ? `<ul class="mt-2" style="list-style-type: disc; margin-left:-15px;">${data.description.split('\n').map(line => `<li>${line.replace(/^-/g, '').trim()}</li>`).join('')}</ul>` : '';
+                            html += `
+                                <div class="section-item">
+                                    <strong>${data['job-title']}</strong>, ${data['company']} 
+                                    <span class="float-end text-muted">${data.dates}</span>
+                                    ${descHtml}
+                                </div>
+                            `;
+                        } else if (sectionType === 'education' && data['degree'] && data['institution']) {
+                            html += `
+                                <div class="section-item">
+                                    <strong>${data['degree']}</strong> - ${data['institution']} 
+                                    <span class="float-end text-muted">${data.dates}</span>
+                                </div>
+                            `;
+                        } else if (sectionType === 'misc' && data['title']) {
+                            html += `
+                                <div class="section-item">
+                                    <strong>${data['title']}</strong>
+                                    <p class="mb-0 text-muted">${data.details}</p>
+                                </div>
+                            `;
+                        }
+                    });
+
+                    previewContainer.innerHTML = html;
+                    // Show/Hide section header based on content
+                    header.style.display = html.trim() ? 'block' : 'none';
+                });
+            };
+
+            // --- 3. Event Listeners ---
+
+            // Initial section additions (to start with one of each)
+            addSection('experience');
+            addSection('education');
+
+            // Listen for all input changes on the form to update the preview
+            form.addEventListener('input', updatePreview);
+
+            // Listen for 'Add Section' buttons
+            document.querySelectorAll('.btn-add-section').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    addSection(e.target.dataset.section);
+                });
+            });
+
+            // Delegate event listener for 'Remove' buttons (since they are added dynamically)
+            form.addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-btn')) {
+                    removeSection(e.target);
+                }
+            });
+
+            // Initial call to set up the default preview content
+            updatePreview();
+
+
+            // --- 4. PDF Generation Logic ---
+
+            downloadBtn.addEventListener('click', () => {
+                // Ensure the preview is up-to-date before generating
+                updatePreview();
+
+                const element = document.getElementById('cv-preview');
+                const name = document.getElementById('name').value.replace(/\s/g, '_') || 'Resume';
+                
+                // Configuration for html2pdf
+                const opt = {
+                    margin: 0.5,
+                    filename: `${name}_CV.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+
+                // Generate and download the PDF
+                html2pdf().set(opt).from(element).save();
+            });
+
+        });
+    </script>
 </body>
 </html>
