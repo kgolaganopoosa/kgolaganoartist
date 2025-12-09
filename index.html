@@ -76,11 +76,6 @@
             transform: translateY(-12px);
             box-shadow: 0 25px 50px rgba(0,0,0,0.2);
         }
-        .card-title {
-            color: #000;
-            font-weight: 700;
-            font-size: 1.15rem;
-        }
         .btn-primary {
             background: #000;
             border: 2px solid #000;
@@ -104,19 +99,11 @@
             color: #fff;
             font-weight: bold;
         }
-        .form-control:focus {
-            border-color: #000;
-            box-shadow: 0 0 0 4px rgba(0,0,0,0.15);
-        }
         footer {
             background: #000;
             color: #ccc;
             padding: 80px 0 40px;
             margin-top: 160px;
-        }
-        footer p {
-            color: #999;
-            font-size: 0.95rem;
         }
         .section-title {
             font-size: 2.5rem;
@@ -175,6 +162,11 @@
 </head>
 <body>
 
+<!-- Audio plays every page load -->
+<audio id="pageLoadSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.mp3" type="audio/mpeg">
+</audio>
+
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
@@ -194,7 +186,7 @@
     </div>
 </nav>
 
-<!-- Hero -->
+<!-- Hero Section -->
 <div class="hero">
     <h1>Your Future Starts Here – South Africa</h1>
     <p class="lead">Universities • TVET Colleges • Textbooks • Bursaries • Graduate Jobs – All in one place</p>
@@ -233,7 +225,7 @@
     </section>
 
     <section id="bursaries" class="my-5">
-        <h2 class="text-center section-title">Top Bursaries & Scholarships</h2>
+        <h2 class="text-center section-title">Bursaries & Scholarships (52+)</h2>
         <div class="row row-cols-1 row-cols-md-3 g-4" id="bursaryList"></div>
     </section>
 
@@ -250,8 +242,22 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-// ==================== FULL DATA ====================
+// Play sound every time the page loads/refreshes
+window.addEventListener('load', () => {
+    const audio = document.getElementById('pageLoadSound');
+    audio.currentTime = 0;
+    audio.volume = 0.4;
+    audio.play().catch(() => {
+        const unlock = () => { audio.play(); };
+        document.body.addEventListener('click', unlock, { once: true });
+        document.body.addEventListener('touchstart', unlock, { once: true });
+    });
+});
+
+// ==================== ALL DATA LISTS ====================
+
 const universities = [
     {name:"University of Cape Town",city:"Cape Town",website:"https://www.uct.ac.za"},
     {name:"University of the Witwatersrand",city:"Johannesburg",website:"https://www.wits.ac.za"},
@@ -277,7 +283,8 @@ const universities = [
     {name:"Durban University of Technology",city:"Durban",website:"https://www.dut.ac.za"},
     {name:"Tshwane University of Technology",city:"Pretoria",website:"https://www.tut.ac.za"},
     {name:"Vaal University of Technology",city:"Vanderbijlpark",website:"https://www.vut.ac.za"},
-    {name:"Mangosuthu University of Technology",city:"Durban",website:"https://www.mut.ac.za"}
+    {name:"Mangosuthu University of Technology",city:"Durban",website:"https://www.mut.ac.za"},
+    {name:"University of South Africa (UNISA)",city:"Distance",website:"https://www.unisa.ac.za"}
 ];
 
 const tvetColleges = [
@@ -297,7 +304,7 @@ const tvetColleges = [
     {name:"Tshwane North TVET College",province:"Gauteng",website:"https://www.tnc.edu.za"},
     {name:"Tshwane South TVET College",province:"Gauteng",website:"https://www.tsc.edu.za"},
     {name:"Western TVET College",province:"Gauteng",website:"https://www.westcol.co.za"},
-    {name:"Coastal KZN TVET College",province:"KwaZulu-Natal",website:"https://www.coastalkzn.co.za"},
+    {name:"Coastal KZN TVET College",province:"KwaZNN",website:"https://www.coastalkzn.co.za"},
     {name:"Elangeni TVET College",province:"KwaZulu-Natal",website:"https://www.elangeni.edu.za"},
     {name:"Esayidi TVET College",province:"KwaZulu-Natal",website:"https://www.esayidifet.co.za"},
     {name:"Majuba TVET College",province:"KwaZulu-Natal",website:"https://www.majuba.edu.za"},
@@ -339,7 +346,7 @@ const textbookShops = [
     {name:"Takealot Textbooks",website:"https://www.takealot.com/books/textbooks",desc:"Cheapest new & used textbooks"},
     {name:"Exclusive Books",website:"https://www.exclusivebooks.co.za",desc:"Academic section + student discounts"},
     {name:"BookExpress",website:"https://www.bookexpress.co.za",desc:"Specialises in prescribed books"},
-    {name:"ItsAcademic",website:"https://itsacademic.co.za",desc:"Prescribed books for UJ, Wits, UP, etc."},
+    {name:"ItsAcademic",website:"https://itsacademic.co.za",desc:"Prescribed books for UJ, Wits, UP"},
     {name:"Adams Books",website:"https://www.adamsbooks.co.za",desc:"Second-hand textbooks (Cape Town)"},
     {name:"Mind-Matters",website:"https://www.mindmatters.co.za",desc:"Medical & health science books"},
     {name:"Book Bound",website:"https://bookboundonline.co.za",desc:"Student-run second-hand platform"},
@@ -349,13 +356,59 @@ const textbookShops = [
 ];
 
 const bursaries = [
-    {name:"NSFAS",website:"https://www.nsfas.org.za",desc:"Covers tuition, accommodation, materials"},
+    {name:"NSFAS",website:"https://www.nsfas.org.za",desc:"Government funding for university & TVET"},
     {name:"Funza Lushaka Bursary",website:"https://www.funzalushaka.doe.gov.za",desc:"Full-cost teaching bursary"},
     {name:"Sasol Bursary",website:"https://www.sasolbursaries.com",desc:"Engineering & Science"},
-    {name:"Standard Bank Bursary",website:"https://www.standardbank.co.za",desc:"Various fields"},
-    {name:"StudyTrust",website:"https://studytrust.org.za",desc:"Many corporate bursaries"},
-    {name:"Exxaro Bursaries",website:"https://www.exxaro.com/careers",desc:"Mining & engineering"},
-    {name:"Moshal Scholarship",website:"https://moshalprogram.org",desc:"Full support for top students"}
+    {name:"Exxaro Bursary",website:"https://www.exxaro.com/careers",desc:"Mining & Engineering"},
+    {name:"Standard Bank Bursary",website:"https://www.standardbank.co.za",desc:"All fields of study"},
+    {name:"Nedbank Bursary",website:"https://www.nedbank.co.za",desc:"Various disciplines"},
+    {name:"Absa Bursary",website:"https://www.absa.co.za/personal/bursaries/",desc:"Finance, IT, Engineering"},
+    {name:"Old Mutual Bursary",website:"https://www.oldmutual.co.za",desc:"Actuarial, Finance, IT"},
+    {name:"Investec Bursary",website:"https://www.investec.com",desc:"Commerce, Engineering, Medicine"},
+    {name:"Allan Gray Orbis Fellowship",website:"https://www.allangrayorbis.org",desc:"Full funding + mentorship"},
+    {name:"Moshal Scholarship",website:"https://moshalprogram.org",desc:"Full support for top students"},
+    {name:"Motsepe Foundation",website:"https://motsepefoundation.org",desc:"Various fields"},
+    {name:"ISFAP Bursary",website:"https://www.isfap.co.za",desc:"Missing middle funding"},
+    {name:"Feenix Crowdfunding",website:"https://feenix.org",desc:"Student debt crowdfunding"},
+    {name:"Canon Collins Trust",website:"https://www.canoncollins.org",desc:"Postgraduate studies"},
+    {name:"Mastercard Foundation",website:"https://mastercardfdn.org",desc:"African students (UCT, UWC, UP)"},
+    {name:"Mandela Rhodes Scholarship",website:"https://www.mandelarhodes.org",desc:"Leadership programme"},
+    {name:"StudyTrust Bursaries",website:"https://studytrust.org.za",desc:"Hundreds of corporate bursaries"},
+    {name:"Eskom Bursary",website:"https://www.eskom.co.za/careers",desc:"Engineering"},
+    {name:"Transnet Bursary",website:"https://www.transnet.net",desc:"Logistics & Engineering"},
+    {name:"MTN Bursary",website:"https://www.mtn.co.za",desc:"IT & Engineering"},
+    {name:"Vodacom Bursary",website:"https://www.vodacom.co.za",desc:"STEM fields"},
+    {name:"Telkom Bursary",website:"https://jobs.telkom.co.za",desc:"IT & Engineering"},
+    {name:"Mercedes-Benz SA Bursary",website:"https://www.mercedes-benzsa.co.za",desc:"Engineering"},
+    {name:"BMW South Africa Bursary",website:"https://www.bmw.co.za",desc:"Engineering & Commerce"},
+    {name:"Toyota SA Bursary",website:"https://www.toyota.co.za",desc:"Engineering"},
+    {name:"Anglo American Bursary",website:"https://www.angloamerican.com",desc:"Mining fields"},
+    {name:"Sibanye-Stillwater Bursary",website:"https://www.sibanyestillwater.com",desc:"Mining & Engineering"},
+    {name:"Gold Fields Bursary",website:"https://www.goldfields.com",desc:"Mining Engineering"},
+    {name:"Harmony Gold Bursary",website:"https://www.harmony.co.za",desc:"Mining disciplines"},
+    {name:"Palabora Mining Bursary",website:"https://www.palabora.com",desc:"Engineering & Metallurgy"},
+    {name:"Glencore Bursary",website:"https://www.glencore.com",desc:"Mining & Finance"},
+    {name:"Mintek Bursary",website:"https://www.mintek.co.za",desc:"Metallurgy & Geology"},
+    {name:"SKA South Africa Bursary",website:"https://www.ska.ac.za",desc:"Astronomy & Engineering"},
+    {name:"Dept of Agriculture Bursary",website:"https://www.dalrrd.gov.za",desc:"Agriculture & Veterinary"},
+    {name:"Dept of Public Works Bursary",website:"https://www.publicworks.gov.za",desc:"Built environment"},
+    {name:"Sentech Bursary",website:"https://www.sentech.co.za",desc:"Electronics & Telecoms"},
+    {name:"SASSETA Bursary",website:"https://www.sasseta.org.za",desc:"Safety & Security"},
+    {name:"CHIETA Bursary",website:"https://www.chieta.org.za",desc:"Chemical Industries"},
+    {name:"HWSETA Bursary",website:"https://www.hwseta.org.za",desc:"Health & Welfare"},
+    {name:"FoodBev SETA Bursary",website:"https://www.foodbev.co.za",desc:"Food & Beverages"},
+    {name:"BankSETA Bursary",website:"https://www.bankseta.org.za",desc:"Banking & Finance"},
+    {name:"PSETA Bursary",website:"https://www.pseta.org.za",desc:"Public Service"},
+    {name:"CATHSSETA Bursary",website:"https://www.cathsseta.org.za",desc:"Culture, Arts & Hospitality"},
+    {name:"AGRISETA Bursary",website:"https://www.agriseta.co.za",desc:"Agriculture"},
+    {name:"FASSET Bursary",website:"https://www.fasset.org.za",desc:"Finance & Accounting"},
+    {name:"INSETA Bursary",website:"https://www.inseta.org.za",desc:"Insurance"},
+    {name:"MERSETA Bursary",website:"https://www.merseta.org.za",desc:"Manufacturing & Engineering"},
+    {name:"SASSETA Bursary",website:"https://www.sasseta.org.za",desc:"Safety & Security"},
+    {name:"TETA Bursary",website:"https://www.teta.org.za",desc:"Transport"},
+    {name:"W&RSETA Bursary",website:"https://www.wrseta.org.za",desc:"Wholesale & Retail"},
+    {name:"SASOL Foundation Bursary",website:"https://www.sasol.com",desc:"STEM fields"},
+    {name:"Murray & Roberts Bursary",website:"https://www.murrob.com",desc:"Engineering & Construction"}
 ];
 
 const jobPortals = [
@@ -386,7 +439,7 @@ function renderCards(containerId, items, type) {
         let badge = type === "tvet" ? `<span class="badge mb-2">${item.province}</span>` : "";
         let subtitle = "";
         if (type === "university") subtitle = item.city || "";
-        else if (type === "textbook" || type === "bursary") subtitle = item.desc ? item.desc.substring(0,80) + (item.desc.length > 80 ? "…" : "") : "";
+        else if (type === "textbook" || type === "bursary") subtitle = item.desc ? item.desc.substring(0,80) + (item.desc.length > 80 ? "..." : "") : "";
 
         col.innerHTML = `
             <div class="card h-100 text-center">
@@ -401,13 +454,13 @@ function renderCards(containerId, items, type) {
     });
 }
 
-// Filtering & Search
+// Search & Category Filtering
 const searchInput = document.getElementById("globalSearch");
 const catButtons = document.querySelectorAll(".cat-btn");
 
 function applyFilters() {
     const query = searchInput.value.toLowerCase();
-    const activeCat = document.querySelector(".cat-btn.active").dataset.category;
+    const activeCat = document.querySelector(".cat-btn.active")?.dataset.category || "all";
 
     let uni = allUniversities.filter(u => u.name.toLowerCase().includes(query) || (u.city && u.city.toLowerCase().includes(query)));
     let tvet = allTvet.filter(t => t.name.toLowerCase().includes(query) || t.province.toLowerCase().includes(query));
@@ -446,11 +499,12 @@ renderCards("textbookList", textbookShops, "textbook");
 renderCards("bursaryList", bursaries, "bursary");
 renderCards("jobList", jobPortals, "job");
 
-// Smooth scrolling
+// Smooth scrolling for navbar links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener("click", function(e) {
         e.preventDefault();
-        document.querySelector(this.getAttribute("href")).scrollIntoView({ behavior: "smooth" });
+        const target = document.querySelector(this.getAttribute("href"));
+        if (target) target.scrollIntoView({ behavior: "smooth" });
     });
 });
 </script>
