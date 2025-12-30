@@ -178,6 +178,7 @@
                 <li class="nav-item"><a class="nav-link" href="#tvet">TVET</a></li>
                 <li class="nav-item"><a class="nav-link" href="#textbooks">Textbooks</a></li>
                 <li class="nav-item"><a class="nav-link" href="#bursaries">Bursaries</a></li>
+                <li class="nav-item"><a class="nav-link" href="#engines">Search Engines</a></li>
                 <li class="nav-item"><a class="nav-link" href="#accommodation">Accommodation</a></li>
                 <li class="nav-item"><a class="nav-link" href="#jobs">Jobs</a></li>
             </ul>
@@ -187,7 +188,7 @@
 
 <div class="hero">
     <h1>Your Future Starts Here – South Africa</h1>
-    <p class="lead">Universities • TVET Colleges • Textbooks • Bursaries • Accommodation • Jobs</p>
+    <p class="lead">Universities • TVET Colleges • Textbooks • Bursaries • Search Engines • Accommodation • Jobs</p>
     
     <div class="search-box mt-5">
         <div class="input-group input-group-lg" style="max-width: 800px; margin: 0 auto;">
@@ -202,6 +203,7 @@
         <button class="cat-btn" data-category="tvet">Colleges</button>
         <button class="cat-btn" data-category="textbooks">Textbooks</button>
         <button class="cat-btn" data-category="bursaries">Bursaries</button>
+        <button class="cat-btn" data-category="engines">Search Engines</button>
         <button class="cat-btn" data-category="accommodation">Accommodation</button>
         <button class="cat-btn" data-category="jobs">Jobs</button>
     </div>
@@ -226,6 +228,11 @@
     <section id="bursaries" class="my-5">
         <h2 class="text-center section-title">Bursaries & Scholarships</h2>
         <div class="row row-cols-1 row-cols-md-3 g-4" id="bursaryList"></div>
+    </section>
+
+    <section id="engines" class="my-5">
+        <h2 class="text-center section-title">Academic Search Engines</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4" id="engineList"></div>
     </section>
 
     <section id="accommodation" class="my-5">
@@ -306,6 +313,14 @@ const bursaries = [
     {name:"ISFAP",desc:"Missing middle student funding.",website:"https://www.isfap.co.za"}
 ];
 
+const searchEngines = [
+    {name:"Google Scholar",desc:"Search scholarly literature across disciplines.",website:"https://scholar.google.com"},
+    {name:"Microsoft Academic",desc:"Semantic search for academic publications.",website:"https://academic.microsoft.com"},
+    {name:"SA ePublications",desc:"South African journals and research papers.",website:"https://journals.co.za"},
+    {name:"ERIC",desc:"Education Resources Information Center.",website:"https://eric.ed.gov/"},
+    {name:"ResearchGate",desc:"Access millions of publications and connect with researchers.",website:"https://www.researchgate.net/"}
+];
+
 const accommodations = [
     {name:"South Point",city:"JHB, CT, PE, DBN",desc:"Large scale urban student living.",website:"https://www.staysouthpoint.co.za"},
     {name:"Respublica",city:"JHB, PTA, CT, BLOEM",desc:"Premium residences with study hubs.",website:"https://respublica.co.za"},
@@ -365,12 +380,12 @@ function applyFilters() {
         (item.province && item.province.toLowerCase().includes(query)) ||
         (item.desc && item.desc.toLowerCase().includes(query));
 
-    // Map of categories to their data and display elements
     const sections = {
         universities: { data: universities, listId: "universityList", sectionId: "universities", type: "university" },
         tvet: { data: tvetColleges, listId: "tvetList", sectionId: "tvet", type: "tvet" },
         textbooks: { data: textbookShops, listId: "textbookList", sectionId: "textbooks", type: "textbook" },
         bursaries: { data: bursaries, listId: "bursaryList", sectionId: "bursaries", type: "bursary" },
+        engines: { data: searchEngines, listId: "engineList", sectionId: "engines", type: "engine" },
         accommodation: { data: accommodations, listId: "accommodationList", sectionId: "accommodation", type: "accommodation" },
         jobs: { data: jobPortals, listId: "jobList", sectionId: "jobs", type: "job" }
     };
@@ -378,14 +393,10 @@ function applyFilters() {
     Object.keys(sections).forEach(key => {
         const config = sections[key];
         const sectionEl = document.getElementById(config.sectionId);
-        
-        // Logical check: Is this category active?
         const isCatActive = (activeCat === "all" || activeCat === key);
         
         if (isCatActive) {
             const filteredItems = config.data.filter(filterFn);
-            
-            // Show the section only if it has matching items (or if no search query is present)
             if (filteredItems.length > 0 || query === "") {
                 sectionEl.style.display = "block";
                 renderCards(config.listId, filteredItems, config.type);
@@ -393,7 +404,6 @@ function applyFilters() {
                 sectionEl.style.display = "none";
             }
         } else {
-            // Hide everything that isn't the selected category
             sectionEl.style.display = "none";
         }
     });
@@ -416,20 +426,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const targetId = this.getAttribute("href").substring(1);
         const target = document.getElementById(targetId);
         
-        // Change category automatically if clicking nav link
         const catBtn = document.querySelector(`.cat-btn[data-category="${targetId}"]`);
         if (catBtn) {
             document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
             catBtn.classList.add("active");
-            applyFilters();
-        }
-
-        if (target) window.scrollTo({ top: target.offsetTop - 100, behavior: "smooth" });
-    });
-});
-
-// Initial Load
-applyFilters();
-</script>
-</body>
-</html>
+            applyFilters
