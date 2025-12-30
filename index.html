@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petal Chain – Education & Career Hub</title>
+    <title>Petal Chain – South Africa's Education & Career Hub</title>
     <link rel="icon" type="image/x-icon" href="/images/icon512.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -154,7 +154,6 @@
             font-weight: 600;
             font-size: 0.8rem;
         }
-        /* Smooth transitions for hiding sections */
         section {
             transition: opacity 0.3s ease;
         }
@@ -180,6 +179,7 @@
                 <li class="nav-item"><a class="nav-link" href="#bursaries">Bursaries</a></li>
                 <li class="nav-item"><a class="nav-link" href="#engines">Search Engines</a></li>
                 <li class="nav-item"><a class="nav-link" href="#accommodation">Accommodation</a></li>
+                <li class="nav-item"><a class="nav-link" href="#events">Events</a></li>
                 <li class="nav-item"><a class="nav-link" href="#jobs">Jobs</a></li>
             </ul>
         </div>
@@ -188,12 +188,12 @@
 
 <div class="hero">
     <h1>Your Future Starts Here – South Africa</h1>
-    <p class="lead">Universities • TVET Colleges • Textbooks • Bursaries • Search Engines • Accommodation • Jobs</p>
+    <p class="lead">Universities • TVET Colleges • Textbooks • Bursaries • Search • Accommodation • Events • Jobs</p>
     
     <div class="search-box mt-5">
         <div class="input-group input-group-lg" style="max-width: 800px; margin: 0 auto;">
             <span class="input-group-text">Search</span>
-            <input type="text" id="globalSearch" class="form-control" placeholder="Search by name, city, or province...">
+            <input type="text" id="globalSearch" class="form-control" placeholder="Search by name, city, or event type...">
         </div>
     </div>
 
@@ -205,6 +205,7 @@
         <button class="cat-btn" data-category="bursaries">Bursaries</button>
         <button class="cat-btn" data-category="engines">Search Engines</button>
         <button class="cat-btn" data-category="accommodation">Accommodation</button>
+        <button class="cat-btn" data-category="events">Events</button>
         <button class="cat-btn" data-category="jobs">Jobs</button>
     </div>
 </div>
@@ -240,6 +241,11 @@
         <div class="row row-cols-1 row-cols-md-3 g-4" id="accommodationList"></div>
     </section>
 
+    <section id="events" class="my-5">
+        <h2 class="text-center section-title">Events & Socials</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4" id="eventList"></div>
+    </section>
+
     <section id="jobs" class="my-5">
         <h2 class="text-center section-title">Graduate & Student Jobs</h2>
         <div class="row row-cols-1 row-cols-md-4 g-4" id="jobList"></div>
@@ -248,7 +254,7 @@
 
 <footer class="text-center">
     <div class="container">
-        <p>© 2025 Coolie Links SA – Empowering Mzansi Youth</p>
+        <p>© 2025 Petal Chain SA – Empowering Mzansi Youth</p>
     </div>
 </footer>
 
@@ -314,22 +320,26 @@ const bursaries = [
 ];
 
 const searchEngines = [
-    {name:"Google Scholar",desc:"Search scholarly literature across disciplines.",website:"https://scholar.google.com"},
-    {name:"Microsoft Academic",desc:"Semantic search for academic publications.",website:"https://academic.microsoft.com"},
-    {name:"SA ePublications",desc:"South African journals and research papers.",website:"https://journals.co.za"},
-    {name:"ERIC",desc:"Education Resources Information Center.",website:"https://eric.ed.gov/"},
-    {name:"ResearchGate",desc:"Access millions of publications and connect with researchers.",website:"https://www.researchgate.net/"}
+    {name:"Google Scholar",desc:"The most comprehensive search for scholarly literature.",website:"https://scholar.google.com"},
+    {name:"Sabinet African Journals",desc:"Access to the largest collection of African research.",website:"https://journals.co.za"},
+    {name:"SciELO SA",desc:"South Africa's premier open-access journal database.",website:"https://www.scielo.org.za"},
+    {name:"ERIC",desc:"Specialized database for education-related research.",website:"https://eric.ed.gov"}
 ];
 
 const accommodations = [
     {name:"South Point",city:"JHB, CT, PE, DBN",desc:"Large scale urban student living.",website:"https://www.staysouthpoint.co.za"},
     {name:"Respublica",city:"JHB, PTA, CT, BLOEM",desc:"Premium residences with study hubs.",website:"https://respublica.co.za"},
     {name:"DigsConnect",city:"National",desc:"South Africa's largest housing marketplace.",website:"https://www.digsconnect.com"},
-    {name:"Campus Key",city:"PTA, BLOEM, CT, PE, STEL",desc:"Luxury lifestyle student spaces.",website:"https://www.campuskey.co.za"},
-    {name:"Thrive Student Living",city:"JHB, PTA, CT",desc:"Growthpoint REIT purpose-built housing.",website:"https://thrivestudentliving.co.za/"},
-    {name:"Rise Student Living",city:"JHB, CT, PTA, KIMB",desc:"Modern suites with gym facilities.",website:"https://www.risestudentliving.com/"},
-    {name:"Campus Africa",city:"Johannesburg",desc:"Affordable rooms in Braamfontein.",website:"https://campusafrica.co.za/"},
-    {name:"My Student House",city:"CT, PE, POTCH, BLOEM",desc:"Affordable shared student housing.",website:"https://mystudenthouse.co.za/"}
+    {name:"Campus Key",city:"PTA, BLOEM, CT, PE, STEL",desc:"Luxury lifestyle student spaces.",website:"https://www.campuskey.co.za"}
+];
+
+const eventList = [
+    {name:"Rocking the Daisies",city:"Cape Town",desc:"SA's biggest music & lifestyle festival.",website:"https://rockingthedaisies.com"},
+    {name:"Ultra South Africa",city:"JHB / CT",desc:"World-renowned electronic music festival.",website:"https://ultrasouthafrica.com"},
+    {name:"Nedbank IMC Conference",city:"Johannesburg",desc:"Africa's leading marketing strategy event.",website:"https://imbizomarketing.co.za"},
+    {name:"Howler Events",city:"National",desc:"Find club events, parties, and social tickets.",website:"https://www.howler.co.za"},
+    {name:"Quicket Events",city:"National",desc:"Local social events, workshops, and concerts.",website:"https://www.quicket.co.za"},
+    {name:"Social Media Week JHB",city:"Johannesburg",desc:"Marketing and digital social trends summit.",website:"https://socialmediaweek.org/johannesburg/"}
 ];
 
 const jobPortals = [
@@ -343,6 +353,7 @@ const jobPortals = [
 
 function renderCards(containerId, items, type) {
     const container = document.getElementById(containerId);
+    if (!container) return;
     container.innerHTML = "";
     if (items.length === 0) {
         container.innerHTML = `<p class="text-center w-100 py-4">No results found in this category.</p>`;
@@ -353,7 +364,7 @@ function renderCards(containerId, items, type) {
         col.className = "col";
         let badge = (type === "tvet") ? `<span class="badge mb-2">${item.province}</span>` : "";
         let subtitle = "";
-        if (type === "university") subtitle = item.city;
+        if (type === "university" || type === "event") subtitle = item.city;
         else if (type === "accommodation") subtitle = `Cities: ${item.city}`;
         else if (item.desc) subtitle = item.desc;
 
@@ -363,7 +374,7 @@ function renderCards(containerId, items, type) {
                     ${badge}
                     <h5 class="card-title mt-2">${item.name}</h5>
                     <p class="text-muted small flex-grow-1">${subtitle || ""}</p>
-                    <a href="${item.website || item.url}" target="_blank" class="btn btn-primary mt-auto">Visit Site</a>
+                    <a href="${item.website || item.url}" target="_blank" class="btn btn-primary mt-auto">View Details</a>
                 </div>
             </div>`;
         container.appendChild(col);
@@ -387,6 +398,7 @@ function applyFilters() {
         bursaries: { data: bursaries, listId: "bursaryList", sectionId: "bursaries", type: "bursary" },
         engines: { data: searchEngines, listId: "engineList", sectionId: "engines", type: "engine" },
         accommodation: { data: accommodations, listId: "accommodationList", sectionId: "accommodation", type: "accommodation" },
+        events: { data: eventList, listId: "eventList", sectionId: "events", type: "event" },
         jobs: { data: jobPortals, listId: "jobList", sectionId: "jobs", type: "job" }
     };
 
@@ -430,4 +442,15 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         if (catBtn) {
             document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
             catBtn.classList.add("active");
-            applyFilters
+            applyFilters();
+        }
+
+        if (target) window.scrollTo({ top: target.offsetTop - 100, behavior: "smooth" });
+    });
+});
+
+// Initial Load
+applyFilters();
+</script>
+</body>
+</html>
